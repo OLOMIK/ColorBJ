@@ -14,3 +14,5 @@
 ## Autorzy:
 - [@gasnicowydivolper](https://github.com/OLOMIK)
 - [@CrystalX](https://crystalx.pl/)
+## Wersja webowa
+Wersję online (webową) można znaleźć [pod tym linkiem](https://crystalx.pl/colorbj/)
