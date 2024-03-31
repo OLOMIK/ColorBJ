@@ -10,7 +10,9 @@ var canvasHeight = 840;
 var blockSize = 5; 
 var currentBackgroundColor = "#111111"; 
 var rubberMode = false;
-
+function setBlockSize(size){
+    blockSize = size;
+}
 document.getElementById("wyb").addEventListener('change', function() {
     ustawkolor(this.value);
 });
