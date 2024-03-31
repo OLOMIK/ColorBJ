@@ -1,14 +1,14 @@
 {
   "name": "colorbj",
   "version": "1.0.0",
-  "description": "ColorBJ - GNU Image Manipulation Program.",
+  "description": "ColorBJ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
     
   },
-  "author": "crystalx",
+  "author": "crystalx, gasnic",
   "license": "ISC",
   "dependencies": { 
     "electron": "^29.1.5"
