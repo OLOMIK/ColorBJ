@@ -9,4 +9,5 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   createWindow()
+  console.log("gui uruchomione poprawnie")
 })
