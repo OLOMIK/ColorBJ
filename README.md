@@ -5,6 +5,7 @@
 - eksportowanie obrazów
 - ustawianie tła
 - ustawianie koloru pisania
+- zmiana rozmiaru pędzla i gumki
 ## Technologie:
 - Electron.js (dla wersji desktopowej)
 - Node.js (dla wersji desktopowej)
