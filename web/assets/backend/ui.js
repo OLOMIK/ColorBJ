@@ -1,3 +1,5 @@
+console.log("załadowano ui.js");
+
 // backend by gasnic https://github.com/OLOMIK
 function showWindow() {
     const container = document.getElementById('windowContainer');
@@ -65,6 +67,16 @@ function showWindow7() {
 
 function hideWindow7() {
     const container = document.getElementById('windowContainer7');
+    container.style.display = 'none';
+}
+
+function showWindow8() {
+    const container = document.getElementById('windowContainer8');
+    container.style.display = 'block';
+}
+
+function hideWindow8() {
+    const container = document.getElementById('windowContainer8');
     container.style.display = 'none';
 }
 
