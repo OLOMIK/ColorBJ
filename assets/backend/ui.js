@@ -80,6 +80,16 @@ function hideWindow8() {
     container.style.display = 'none';
 }
 
+function showWindow9() {
+    const container = document.getElementById('windowContainer9');
+    container.style.display = 'block';
+}
+
+function hideWindow9() {
+    const container = document.getElementById('windowContainer9');
+    container.style.display = 'none';
+}
+
 function showRubberNotif() {
     const container = document.getElementById('rbContainer');
     container.style.display = 'block';
