@@ -1,4 +1,4 @@
-/* frontend by CrystalX  */
+
 
 :root {
     --set-color: #111111;
@@ -181,6 +181,20 @@ nav ul li ul li a:hover {
     background-color: #242424;
 }
 
+#aktu{
+    margin-left: 8px;
+    font-size: 15px;
+}
+
+#aktunag{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+#bum{
+    margin-top: 25px;
+}
+
 #windowContainer {
     display: none;
 }
@@ -206,6 +220,14 @@ nav ul li ul li a:hover {
 }
 
 #windowContainer7 {
+    display: none;
+}
+
+#windowContainer8 {
+    display: none;
+}
+
+#windowContainer9 {
     display: none;
 }
 
@@ -429,3 +451,6 @@ nav ul li ul li a:hover {
         width: 300px;
     }
 }
+
+
+
