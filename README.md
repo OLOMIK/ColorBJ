@@ -13,5 +13,6 @@
 - CSS
 ## Autorzy:
 - [@gasnicowydivolper](https://github.com/OLOMIK)
+- [@hotniewiem](https://github.com/hotniewiem)
 ## Wersja webowa
 Wersję online (webową) można znaleźć [pod tym linkiem](https://crystalx.pl/colorbj/)
