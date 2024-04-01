@@ -1,4 +1,4 @@
-// backend by gasnic https://github.com/OLOMIK
+// backend by gasnic https://github.com/OLOMIK 2.2
 const { app, BrowserWindow, Notification } = require('electron')
 var fs = require('fs');
 const https = require('https');
