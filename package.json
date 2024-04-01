@@ -6,15 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
-    
   },
   "author": "crystalx, gasnic",
   "license": "ISC",
-  "dependencies": { 
-    "electron": "^29.1.5"
+  "dependencies": {
+    "electron": "^29.1.5",
+    "fs": "^0.0.1-security"
   },
   "devDependencies": {
     "electron-packager": "^17.1.2"
   }
-  
 }
