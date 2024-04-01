@@ -166,3 +166,29 @@ function dupkadupeczka() {
     const container = document.getElementById('windowContainer7');
     container.style.display = 'block';
 }
+document.getElementById('applyColors').addEventListener('click', function() {
+    var canvas = document.getElementById('niepaintCanvas');
+    var ctx = canvas.getContext('2d');
+
+    
+    var rValue = document.getElementById('rvalue').value;
+    var gValue = document.getElementById('gvalue').value;
+    var bValue = document.getElementById('bvalue').value;
+    var gammaValue = document.getElementById('gammaValue').value;
+
+    
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var data = imageData.data;
+
+    
+    for (var i = 0; i < data.length; i += 4) {
+        
+        data[i] = 255 * Math.pow((data[i] / 255) + parseInt(rValue)/255, 1 / gammaValue); // Czerwony
+        data[i + 1] = 255 * Math.pow((data[i + 1] / 255) + parseInt(gValue)/255, 1 / gammaValue); // Zielony
+        data[i + 2] = 255 * Math.pow((data[i + 2] / 255) + parseInt(bValue)/255, 1 / gammaValue); // Niebieski
+       
+    }
+
+    
+    ctx.putImageData(imageData, 0, 0);
+});

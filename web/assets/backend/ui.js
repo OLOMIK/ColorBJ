@@ -139,4 +139,12 @@ function hideRubberNotif5() {
     const container = document.getElementById('rbContainer5');
     container.style.display = 'none';
 }
+function hideWindow(number) {
+    const container = document.getElementById('windowContainer'+number);
+    container.style.display = 'none';
+}
+function showWindow(number) {
+    const container = document.getElementById('windowContainer'+number);
+    container.style.display = 'block';
 
+}

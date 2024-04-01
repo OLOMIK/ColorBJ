@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ColorBJ 2.2</title>
+    <title>ColorBJ 3.0</title>
 
-    
+    <link rel="shortcut icon" href="niepaint.ico" type="image/x-icon">
     <link rel="stylesheet" href="assets/styles/style.css">
 </head>
 
@@ -21,7 +21,7 @@
                             <path fill="currentColor"
                                 d="M14.854.146a.5.5 0 0 1 .079.605l-3.841 6.634l-3.477-3.477L14.25.068a.5.5 0 0 1 .605.078M6.72 4.427l-1.97 1.14a.5.5 0 0 0-.104.787l4 4a.5.5 0 0 0 .787-.103l1.14-1.97zM.99 10.441a3.063 3.063 0 0 1 2.947-2.227H4a3 3 0 0 1 3 3v.053a2.947 2.947 0 0 1-2.947 2.947h-.08a2.59 2.59 0 0 1-1.115-.252a1.594 1.594 0 0 0-1.57.113l-.51.341a.5.5 0 0 1-.759-.553z" />
                         </svg>
-                        ColorBJ 2.2
+                        ColorBJ 3.0
                     </div>
                     <div class="divider"></div>
                     <nav>
@@ -29,8 +29,9 @@
                             <li>
                                 <a class="ps" href="#" >Plik</a>
                                 <ul id="dupa11">
-                                    <li><a href="#" onclick="showWindow3()">Zapisz Obraz</a></li>
-                                    <li><a href="#" onclick="showWindow6()">Otwórz Obraz</a></li>
+                                    <li><a onclick="showWindow3()">Zapisz Obraz</a></li>
+                                    <li><a onclick="showWindow6()">Otwórz Obraz</a></li>
+                                    <li><a onclick="showWindow(11)">Nowy plik</a></li>
 
                                 </ul>
                             </li>
@@ -59,7 +60,7 @@
                                 d="M12.728 12.728L8.485 8.485l-5.657 5.657l2.122 2.121a3 3 0 0 0 4.242 0zM11.284 17H14a1 1 0 0 1 0 2H3a1 1 0 0 1-.133-1.991l-1.453-1.453a2 2 0 0 1 0-2.828L12.728 1.414a2 2 0 0 1 2.828 0L19.8 5.657a2 2 0 0 1 0 2.828z" />
                         </svg>
                     </div>
-                    <div class="tooltip fade icon" onclick="showWindow()" data-title="Wybierz Kolor">
+                    <div class="tooltip fade icon" onclick="showWindow(3)" data-title="Wybierz Kolor">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
                             <path
                                 d="M256 64C150.401 64 64 150.401 64 256c0 105.604 86.401 192 192 192 18.136 0 32-13.864 32-32 0-8.531-3.198-16-8.531-21.333-5.333-5.334-8.531-12.803-8.531-21.334 0-18.135 13.864-32 32-32h38.396c58.667 0 106.667-48 106.667-106.666C448 140.802 361.604 64 256 64zM138.667 256c-18.136 0-32-13.864-32-32s13.864-32 32-32c18.135 0 32 13.864 32 32s-13.865 32-32 32zm64-85.333c-18.136 0-32-13.865-32-32 0-18.136 13.864-32 32-32 18.135 0 32 13.864 32 32 0 18.135-13.865 32-32 32zm106.666 0c-18.135 0-32-13.865-32-32 0-18.136 13.865-32 32-32 18.136 0 32 13.864 32 32 0 18.135-13.864 32-32 32zm64 85.333c-18.135 0-32-13.864-32-32s13.865-32 32-32c18.136 0 32 13.864 32 32s-13.864 32-32 32z"
@@ -86,6 +87,9 @@
                     </div>
                     <div class="tooltip fade icon" onclick="showWindow8()" data-title="Rozmiar Pisaka i Gumki">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 56 56"><path fill="currentColor" fill-rule="evenodd" d="M42.84 16.12L16.12 42.84h5.526a2.08 2.08 0 1 1 0 4.16H11.248l-.074-.001a2.074 2.074 0 0 1-1.544-.608a2.071 2.071 0 0 1-.602-1.3A2.094 2.094 0 0 1 9 44.752V34.354a2.08 2.08 0 1 1 4.16 0v5.567l26.76-26.762h-5.566a2.08 2.08 0 1 1 0-4.159h10.398c.116 0 .229.01.34.028c.473.038.936.239 1.299.602c.425.424.627.987.608 1.544l.001.074v10.398a2.08 2.08 0 1 1-4.16 0z"/></svg>
+                    </div>
+                    <div class="tooltip fade icon" onclick="showWindow(10)" data-title="Zmień kolory obrazu">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12 20q-2.921 0-4.96-2.002T5 13.125q0-1.477.558-2.687q.557-1.211 1.484-2.196l4.12-4.025q.186-.18.403-.264q.218-.084.435-.084t.435.084q.217.084.403.264l4.12 4.025q.927.985 1.484 2.224q.558 1.24.558 2.659q0 2.871-2.04 4.873T12 20m0-1V4.8L7.75 9q-.875.825-1.312 1.875T6 13.125q0 2.425 1.75 4.15T12 19"/></svg>
                     </div>
                 </div>
                 <div id="container">
@@ -246,6 +250,80 @@
                 <div id="aktu">- Poprawiono responsywność.</div>
                 <div id="aktu">- DESKTOP: Dodano system automatycznej aktualizacji.</div>
             </div>
+            <div id="bum">
+                <div id="aktunag">ColorBJ 3.0</div>
+                <hr>
+                <div id="aktu">- Dodano możliwość manipulacji kolorami</div>
+                <div id="aktu">- Dodano możliwość stworzenia nowego projektu na pasku <b>Plik</b></div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="windowContainer" id="windowContainer10">
+        <div class="containerContent">
+            <div class="containerHeader">
+                <div style="display: flex; justify-items: center;">
+                    <svg style="margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22"/></svg>
+                    Ustaw kolory obrazu
+                </div>
+                <div class="close" onclick="hideWindow(10)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="m12 12.708l3.246 3.246q.14.14.344.15q.204.01.364-.15t.16-.354q0-.194-.16-.354L12.708 12l3.246-3.246q.14-.14.15-.344q.01-.204-.15-.364t-.354-.16q-.194 0-.354.16L12 11.292L8.754 8.046q-.14-.14-.344-.15q-.204-.01-.364.15t-.16.354q0 .194.16.354L11.292 12l-3.246 3.246q-.14.14-.15.344q-.01.204.15.364t.354.16q.194 0 .354-.16zM12.003 21q-1.866 0-3.51-.708q-1.643-.709-2.859-1.924q-1.216-1.214-1.925-2.856Q3 13.87 3 12.003q0-1.866.708-3.51q.709-1.643 1.924-2.859q1.214-1.216 2.856-1.925Q10.13 3 11.997 3q1.866 0 3.51.708q1.643.709 2.859 1.924q1.216 1.214 1.925 2.856Q21 10.13 21 11.997q0 1.866-.708 3.51q-.709 1.643-1.924 2.859q-1.214 1.216-2.856 1.925Q13.87 21 12.003 21" />
+                    </svg>
+                </div>
+            </div>
+            <div style="margin-left: 10px;" id="kolorkidupa">
+                
+                <div class="color-control">
+                    <label for="rvalue">R:</label>
+                    <input type="range" min="0" max="255" id="rvalue">
+                </div>
+                <div class="color-control">
+                    <label for="gvalue">G:</label>
+                    <input type="range" min="0" max="255" id="gvalue">
+                </div>
+                <div class="color-control">
+                    <label for="bvalue">B:</label>
+                    <input type="range" min="0" max="255" id="bvalue">
+                </div>
+                <div class="color-control">
+                    <label for="gammaValue">Gamma:</label>
+                    <input type="range" id="gammaValue" min="0.1" max="2.5" step="0.01" value="1">
+                </div>
+                <center><button id="applyColors">Zastosuj kolory</button></center>
+                
+                    
+       
+
+
+            </div>
+        </div>
+    </div>
+    <div class="windowContainer" id="windowContainer11">
+        <div class="containerContent">
+            <div class="containerHeader">
+                <div style="display: flex; justify-items: center;">
+                    <svg style="margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22"/></svg>
+                    Nowy obraz
+                </div>
+                <div class="close" onclick="hideWindow(11)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="m12 12.708l3.246 3.246q.14.14.344.15q.204.01.364-.15t.16-.354q0-.194-.16-.354L12.708 12l3.246-3.246q.14-.14.15-.344q.01-.204-.15-.364t-.354-.16q-.194 0-.354.16L12 11.292L8.754 8.046q-.14-.14-.344-.15q-.204-.01-.364.15t-.16.354q0 .194.16.354L11.292 12l-3.246 3.246q-.14.14-.15.344q-.01.204.15.364t.354.16q.194 0 .354-.16zM12.003 21q-1.866 0-3.51-.708q-1.643-.709-2.859-1.924q-1.216-1.214-1.925-2.856Q3 13.87 3 12.003q0-1.866.708-3.51q.709-1.643 1.924-2.859q1.214-1.216 2.856-1.925Q10.13 3 11.997 3q1.866 0 3.51.708q1.643.709 2.859 1.924q1.216 1.214 1.925 2.856Q21 10.13 21 11.997q0 1.866-.708 3.51q-.709 1.643-1.924 2.859q-1.214 1.216-2.856 1.925Q13.87 21 12.003 21" />
+                    </svg>
+                </div>
+            </div>
+            <div style="margin-left: 10px;" id="kolorkidupunia">
+                
+                <h2>Zapisać?</h2>
+                <button id="zielony1" onclick="hideWindow(10); showWindow(3);">Tak</button>
+                <button id="czerwony1" onClick="location.reload(true);">Nie</button>
+                    
+       
+
 
             </div>
         </div>
