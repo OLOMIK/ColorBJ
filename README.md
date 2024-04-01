@@ -1,3 +1,5 @@
+# ColorBJ - open-source photo editor
+
 <h3 align="center">
 
 <p align="center"><img src="https://i.imgur.com/ArW1tes.png" width="64" height="64" align="center"></p>
@@ -12,7 +14,7 @@
 
   
 
-# ColorBJ - open-source photo editor
+
 ## Funkcje:
 - rysowanie
 - importowanie obrazów (.png,.jpg,.jpeg,.webp)
