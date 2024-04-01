@@ -1,4 +1,4 @@
-# ColorBJ - open-source photo editor
+<h1 align="center">ColorBJ - open-source photo editor</h1>
 
 <h3 align="center">
 
