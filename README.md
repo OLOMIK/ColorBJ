@@ -14,24 +14,27 @@
 
   
 
+## Features:
+- Drawing
+- Importing images (.png, .jpg, .jpeg, .webp)
+- Exporting images
+- Setting background
+- Setting writing color
+- Changing brush and eraser size
 
-## Funkcje:
-- rysowanie
-- importowanie obrazów (.png,.jpg,.jpeg,.webp)
-- eksportowanie obrazów
-- ustawianie tła
-- ustawianie koloru pisania
-- zmiana rozmiaru pędzla i gumki
-## Technologie:
-- Electron.js (dla wersji desktopowej)
-- Node.js (dla wersji desktopowej)
-- Javascript
+## Technologies:
+- Electron.js (for the desktop version)
+- Node.js (for the desktop version)
+- JavaScript
 - HTML
 - CSS
-## Autorzy:
+
+## Authors:
 - [@gasnicowydivolper](https://github.com/OLOMIK)
 - [@hotniewiem](https://github.com/hotniewiem)
-## Wersja webowa
-Wersję online (webową) można znaleźć [pod tym linkiem](https://crystalx.pl/colorbj/)
-## UWAGA
-Jeżeli chcesz wprowadzić jakieś zmiany, wyślij pull requesta
+
+## Web Version
+The online (web) version can be found [here](https://crystalx.pl/colorbj/).
+
+## NOTE
+If you would like to make any changes, please send a pull request.
