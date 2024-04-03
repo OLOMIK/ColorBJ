@@ -135,6 +135,7 @@ function saveImage() {
     link.download = filename;
     link.href = canvas.toDataURL();
     link.click();
+    
 }
 
 function openImage(event) {
@@ -183,9 +184,9 @@ document.getElementById('applyColors').addEventListener('click', function() {
     
     for (var i = 0; i < data.length; i += 4) {
         
-        data[i] = 255 * Math.pow((data[i] / 255) + parseInt(rValue)/255, 1 / gammaValue); // Czerwony
-        data[i + 1] = 255 * Math.pow((data[i + 1] / 255) + parseInt(gValue)/255, 1 / gammaValue); // Zielony
-        data[i + 2] = 255 * Math.pow((data[i + 2] / 255) + parseInt(bValue)/255, 1 / gammaValue); // Niebieski
+        data[i] = 255 * Math.pow((data[i] / 255) + parseInt(rValue)/255, 1 / gammaValue);   
+        data[i + 1] = 255 * Math.pow((data[i + 1] / 255) + parseInt(gValue)/255, 1 / gammaValue); 
+        data[i + 2] = 255 * Math.pow((data[i + 2] / 255) + parseInt(bValue)/255, 1 / gammaValue); 
        
     }
 
