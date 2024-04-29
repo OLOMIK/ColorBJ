@@ -19,7 +19,7 @@ app.whenReady().then(() => {
 
 // tu autoupdate robimy
 function checkForUpdates() {
-  https.get(url, (res) => {
+  https.get(url, (res) => { 
     let data = '';
 
     
