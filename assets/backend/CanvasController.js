@@ -16,7 +16,12 @@ function setCanvasSize() {
     ctx.fillStyle = currentBackgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
-
+function customCanvasSize(){
+    canvas.width = document.getElementById("dlugoscinput").value;
+    canvas.height = document.getElementById("szerokoscinput").value;
+    ctx.fillStyle = currentBackgroundColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
 function setBlockSize(size) {
     blockSize = size;
 }
