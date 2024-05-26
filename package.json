@@ -9,7 +9,7 @@
   "author": "crystalx, gasnic",
   "license": "ISC",
   "dependencies": {
-    "electron": "^29.1.5",
+    "electron": "^29.4.1",
     "fs": "^0.0.1-security"
   },
   "devDependencies": {

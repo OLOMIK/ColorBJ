@@ -1,32 +1,43 @@
-// backend by gasnic https://github.com/OLOMIK 2.2
-const { app, BrowserWindow, Notification } = require('electron')
-var fs = require('fs');
+const { app, BrowserWindow, Notification } = require('electron');
 const https = require('https');
 const url = 'https://crystalx.pl/colorbj/lts-version.txt';
+
+let mainWindow;
+
 const createWindow = () => {
-  const win = new BrowserWindow({autoHideMenuBar: true, icon: "niepaint.ico"})
-  win.maximize()
-  win.loadFile('index.html')
-}
+  mainWindow = new BrowserWindow({
+    autoHideMenuBar: true,
+    icon: "niepaint.ico"
+  });
+  mainWindow.maximize();
+  mainWindow.loadFile('index.html');
+};
 
-app.whenReady().then(() => {
-  createWindow()
-  console.log("gui uruchomione poprawnie")
+app.on('ready', () => {
+  createWindow();
+  console.log("GUI uruchomione poprawnie");
   checkForUpdates();
-})
+});
 
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
 
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
+});
 
-// tu autoupdate robimy
 function checkForUpdates() {
-  https.get(url, (res) => { 
+  https.get(url, (res) => {
     let data = '';
-
     
     res.on('data', (chunk) => {
       data += chunk;
     });
-
     
     res.on('end', () => {
       const remoteVersion = data.trim();
@@ -36,6 +47,7 @@ function checkForUpdates() {
     console.error("Error: " + err.message);
   });
 }
+
 function compareVersions(remoteVersion) {
   const packageJson = require('./package.json');
   const localVersion = packageJson.version;
@@ -44,6 +56,7 @@ function compareVersions(remoteVersion) {
     showUpdateNotification(remoteVersion);
   }
 }
+
 function showUpdateNotification(rv) {
   const notification = new Notification({
     title: 'Dostępna aktualizacja',
@@ -52,8 +65,7 @@ function showUpdateNotification(rv) {
   });
 
   notification.onclick = () => {
-    require("shell").openExternal("https://github.com/OLOMIK/ColorBJ/")
-    
+    require('electron').shell.openExternal("https://github.com/OLOMIK/ColorBJ/");
   };
 
   notification.show();

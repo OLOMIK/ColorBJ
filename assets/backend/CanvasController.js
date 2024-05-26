@@ -8,6 +8,7 @@ var rubberMode = false;
 var blockSize = 5;
 var currentBackgroundColor = "#111111";
 var kolor = "#5e5e5e";
+var posListening = false;
 
 
 function setCanvasSize() {
@@ -92,11 +93,14 @@ function disableRubberMode() {
 
 
 function fillSzachownica() {
+    stopPainting();
     kolor = document.getElementById("colorSel").value;
     ctx.fillStyle = kolor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     document.getElementById('windowContainer5').style.display = 'none';
-    painting = false;
+    
+    startPainting();
+    ustawkolor('#5e5e5e');
 }
 
 // Clear canvas
@@ -224,6 +228,25 @@ function setupDragAndDrop() {
     }
 }
 // koniec drag & dropa
+function dupa(){
+    posListening = true;
+}
+document.getElementById('niepaintCanvas').onclick = function(e) {
+    if(posListening){
+        stopPainting();
+        var rect = e.target.getBoundingClientRect();
+        var x = e.clientX - rect.left; 
+        var y = e.clientY - rect.top;  
+        document.getElementById("posx").value = x;
+        document.getElementById("posy").value = y;
+        posListening = false;
+        const container = document.getElementById('windowContainer7');
+        container.style.display = 'block';
+        startPainting();
+    }
+
+
+  }
 window.onload = function() {
     setupCanvas();
     setupDragAndDrop();
