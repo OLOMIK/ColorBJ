@@ -1,6 +1,4 @@
-// backend by gasnic https://github.com/OLOMIK
 console.log("załadowano backend");
-
 
 var canvas, ctx;
 var painting = false;
@@ -9,7 +7,6 @@ var blockSize = 5;
 var currentBackgroundColor = "#111111";
 var kolor = "#5e5e5e";
 var posListening = false;
-
 
 function setCanvasSize() {
     canvasWidth = window.innerWidth < 768 ? window.innerWidth - 70 : 1200;
@@ -24,11 +21,9 @@ function setBlockSize(size) {
     blockSize = size;
 }
 
-
 document.getElementById("wyb").addEventListener('change', function() {
     ustawkolor(this.value);
 });
-
 
 function setupCanvas() {
     canvas = document.getElementById('niepaintCanvas');
@@ -49,67 +44,65 @@ function setupCanvas() {
     canvas.addEventListener('touchend', stopPainting, { passive: false });
 }
 
-
 function ustawkolor(color) {
     kolor = color == '#000000' ? '#5e5e5e' : color;
     painting = false;
 }
-
 
 function startPainting(event) {
     painting = true;
     paint(event);
 }
 
-
 function stopPainting() {
     painting = false;
 }
 
-
 function paint(event) {
     if (!painting) return;
-    var x = (event.touches ? event.touches[0].pageX : event.pageX) - canvas.offsetLeft;
-    var y = (event.touches ? event.touches[0].pageY : event.pageY) - canvas.offsetTop;
+
+    var x, y;
+
+    if (event.touches) {
+        x = event.touches[0].pageX - canvas.offsetLeft;
+        y = event.touches[0].pageY - canvas.offsetTop;
+    } else {
+        x = event.pageX - canvas.offsetLeft;
+        y = event.pageY - canvas.offsetTop;
+    }
+
     ctx.fillStyle = rubberMode ? currentBackgroundColor : kolor;
     ctx.fillRect(x, y, blockSize, blockSize);
 }
-
 
 function touchPaint(e) {
     e.preventDefault();
     paint(e);
 }
 
-
 function toggleRubberMode() {
     rubberMode = !rubberMode;
 }
-
 
 function disableRubberMode() {
     rubberMode = false;
 }
 
-
 function fillSzachownica() {
-    stopPainting();
-    kolor = document.getElementById("colorSel").value;
-    ctx.fillStyle = kolor;
+    
+    var kolorInput = document.getElementById("colorSel").value;
+    ustawkolor(kolorInput);
+    ctx.fillStyle = kolorInput;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     document.getElementById('windowContainer5').style.display = 'none';
-    
-    startPainting();
     ustawkolor('#5e5e5e');
 }
 
-// Clear canvas
 function clearSzachownica() {
     ctx.fillStyle = currentBackgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     document.getElementById('windowContainer4').style.display = 'none';
 }
-
 
 function saveImage() {
     var filename = document.getElementById('filenameInput').value.trim();
@@ -118,7 +111,6 @@ function saveImage() {
     link.href = canvas.toDataURL();
     link.click();
 }
-
 
 function openImage(event) {
     var input = event.target;
@@ -134,7 +126,6 @@ function openImage(event) {
     };
     reader.readAsDataURL(input.files[0]);
 }
-
 
 function drawTextOnCanvas(text, x, y, font, color) {
     ctx.font = font || 'Arial';
@@ -160,12 +151,10 @@ document.getElementById('applyColors').addEventListener('click', function() {
     ctx.putImageData(imageData, 0, 0);
 });
 
-
 function dupkadupeczka() {
     drawTextOnCanvas(document.getElementById("tekscior").value, document.getElementById("posx").value, document.getElementById("posy").value, document.getElementById("rozmiar").value + "px " + document.getElementById("fontname").value, document.getElementById("kolor").value);
     document.getElementById('windowContainer7').style.display = 'block';
 }
-// zajebisty drag & drop (prowizorycznie, ale działa XD)
 
 function setupDragAndDrop() {
     const dropArea = document.getElementById('niepaintCanvas');
@@ -179,7 +168,6 @@ function setupDragAndDrop() {
         e.stopPropagation();
     }
 
-
     ['dragenter', 'dragover'].forEach(eventName => {
         dropArea.addEventListener(eventName, highlight, false);
     });
@@ -189,14 +177,13 @@ function setupDragAndDrop() {
     });
 
     function highlight(e) {
-        dropArea.classList.add('highlight'); 
+        dropArea.classList.add('highlight');
     }
 
     function unhighlight(e) {
         dropArea.classList.remove('highlight');
     }
 
-    
     dropArea.addEventListener('drop', handleDrop, false);
 
     function handleDrop(e) {
@@ -215,7 +202,6 @@ function setupDragAndDrop() {
             return function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    // Załaduj obraz na canvas
                     const ctx = dropArea.getContext('2d');
                     ctx.clearRect(0, 0, dropArea.width, dropArea.height);
                     ctx.drawImage(img, 0, 0, dropArea.width, dropArea.height);
@@ -227,16 +213,17 @@ function setupDragAndDrop() {
         reader.readAsDataURL(file);
     }
 }
-// koniec drag & dropa
-function dupa(){
+
+function dupa() {
     posListening = true;
 }
+
 document.getElementById('niepaintCanvas').onclick = function(e) {
-    if(posListening){
+    if (posListening) {
         stopPainting();
         var rect = e.target.getBoundingClientRect();
-        var x = e.clientX - rect.left; 
-        var y = e.clientY - rect.top;  
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
         document.getElementById("posx").value = x;
         document.getElementById("posy").value = y;
         posListening = false;
@@ -244,11 +231,9 @@ document.getElementById('niepaintCanvas').onclick = function(e) {
         container.style.display = 'block';
         startPainting();
     }
+}
 
-
-  }
 window.onload = function() {
     setupCanvas();
     setupDragAndDrop();
 };
-
