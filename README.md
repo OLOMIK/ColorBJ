@@ -21,6 +21,9 @@
 - Setting background
 - Setting writing color
 - Changing brush and eraser size
+- Removing background
+- Text editing
+- Color manipulating
 
 ## Technologies:
 - Electron.js (for the desktop version)
