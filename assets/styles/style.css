@@ -505,3 +505,19 @@ nav ul li ul li a:hover {
         padding: 15px;
     }
 }
+#bar {
+    width: 10%;
+    height: 30px;
+    background-color: #04AA6D;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+  }
+.wycentrowane{
+    margin-top: 30vh;
+    
+
+}
+#progressBar{
+    margin-left: 42vw;
+}

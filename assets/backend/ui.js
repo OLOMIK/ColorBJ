@@ -89,56 +89,6 @@ function hideWindow9() {
     const container = document.getElementById('windowContainer9');
     container.style.display = 'none';
 }
-
-function showRubberNotif() {
-    const container = document.getElementById('rbContainer');
-    container.style.display = 'block';
-}
-
-function hideRubberNotif() {
-    const container = document.getElementById('rbContainer');
-    container.style.display = 'none';
-}
-
-function showRubberNotif2() {
-    const container = document.getElementById('rbContainer2');
-    container.style.display = 'block';
-}
-
-function hideRubberNotif2() {
-    const container = document.getElementById('rbContainer2');
-    container.style.display = 'none';
-}
-
-function showRubberNotif3() {
-    const container = document.getElementById('rbContainer3');
-    container.style.display = 'block';
-}
-
-function hideRubberNotif3() {
-    const container = document.getElementById('rbContainer3');
-    container.style.display = 'none';
-}
-
-function showRubberNotif4() {
-    const container = document.getElementById('rbContainer4');
-    container.style.display = 'block';
-}
-
-function hideRubberNotif4() {
-    const container = document.getElementById('rbContainer4');
-    container.style.display = 'none';
-}
-
-function showRubberNotif5() {
-    const container = document.getElementById('rbContainer5');
-    container.style.display = 'block';
-}
-
-function hideRubberNotif5() {
-    const container = document.getElementById('rbContainer5');
-    container.style.display = 'none';
-}
 function hideWindow(number) {
     const container = document.getElementById('windowContainer'+number);
     container.style.display = 'none';
@@ -147,4 +97,11 @@ function showWindow(number) {
     const container = document.getElementById('windowContainer'+number);
     container.style.display = 'block';
 
+}
+async function Notification(text){
+    const container = document.getElementById('rbContainer');
+    let zapistekstu = document.getElementById('notifvalue');
+    zapistekstu.innerHTML=text;
+    container.style.display='block'
+    setTimeout(function(){container.style.display='none'}, 3000)
 }

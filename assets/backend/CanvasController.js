@@ -21,6 +21,13 @@ function customCanvasSize(){
     canvas.height = document.getElementById("szerokoscinput").value;
     ctx.fillStyle = currentBackgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    Notification("Zmieniono rozmiary pola roboczego.")
+}
+function customSize2(w, h){
+    canvas.width = w;
+    canvas.height = h;
+    ctx.fillStyle = currentBackgroundColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 function setBlockSize(size) {
     blockSize = size;
@@ -87,6 +94,7 @@ function touchPaint(e) {
 
 function toggleRubberMode() {
     rubberMode = !rubberMode;
+    Notification("Przełączono tryb gumki.");
 }
 
 function disableRubberMode() {
@@ -101,12 +109,14 @@ function fillSzachownica() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     document.getElementById('windowContainer5').style.display = 'none';
     ustawkolor('#5e5e5e');
+    Notification("Wypełniono pole robocze nowym kolorem.");
 }
 
 function clearSzachownica() {
     ctx.fillStyle = currentBackgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     document.getElementById('windowContainer4').style.display = 'none';
+    Notification("Wyczyszczono pole robocze.");
 }
 
 function saveImage() {
@@ -115,6 +125,7 @@ function saveImage() {
     link.download = filename;
     link.href = canvas.toDataURL();
     link.click();
+    Notification("Zapisano obraz.");
 }
 
 function openImage(event) {
@@ -125,9 +136,11 @@ function openImage(event) {
         var image = new Image();
         image.onload = function() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            customSize2(image.width, image.height);
             ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
         };
         image.src = dataURL;
+        Notification("Otwarto nowy obraz.");
     };
     reader.readAsDataURL(input.files[0]);
 }
@@ -154,11 +167,13 @@ document.getElementById('applyColors').addEventListener('click', function() {
     }
 
     ctx.putImageData(imageData, 0, 0);
+    Notification("Zmieniono kolory obrazu.")
 });
 
 function dupkadupeczka() {
     drawTextOnCanvas(document.getElementById("tekscior").value, document.getElementById("posx").value, document.getElementById("posy").value, document.getElementById("rozmiar").value + "px " + document.getElementById("fontname").value, document.getElementById("kolor").value);
     document.getElementById('windowContainer7').style.display = 'block';
+    Notification("Dodano nowy tekst do pola roboczego.")
 }
 
 function setupDragAndDrop() {
@@ -210,8 +225,10 @@ function setupDragAndDrop() {
                     const ctx = dropArea.getContext('2d');
                     ctx.clearRect(0, 0, dropArea.width, dropArea.height);
                     ctx.drawImage(img, 0, 0, dropArea.width, dropArea.height);
+
                 };
                 img.src = e.target.result;
+                Notification("Załadowano plik na canvas.");
             };
         })(file);
 
@@ -235,9 +252,65 @@ document.getElementById('niepaintCanvas').onclick = function(e) {
         const container = document.getElementById('windowContainer7');
         container.style.display = 'block';
         startPainting();
+        
     }
 }
 
+
+async function removeBackground() {
+    const canvas = document.getElementById('niepaintCanvas');
+    const ctx = canvas.getContext('2d');
+    const imageBase64 = canvas.toDataURL('image/png').split(',')[1]; 
+
+    const apiKey = 'SG_83a74bc3458a84da';
+    const url = 'https://api.segmind.com/v1/bg-removal';
+
+    const data = {
+        image: imageBase64,
+        method: 'object'
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+
+        const blob = await response.blob();
+        const urlObject = URL.createObjectURL(blob);
+
+        const resultImage = new Image();
+        resultImage.onload = function() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(resultImage, 0, 0, canvas.width, canvas.height);
+            URL.revokeObjectURL(urlObject); 
+        };
+        resultImage.src = urlObject;
+        Notification("Usunięto tło z obrazu.");
+    } catch (error) {
+        const container = document.getElementById('windowContainer7');
+        container.style.display = 'block';
+        container.innerHTML = "Błąd komunikacji z API usuwania tła. Spróbuj ponownie później."
+    }
+}
+function dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+}
 window.onload = function() {
     setupCanvas();
     setupDragAndDrop();

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ColorBJ 5.0</title>
+    <title>ColorBJ 6.0</title>
 
     <link rel="shortcut icon" href="niepaint.ico" type="image/x-icon">
     <link rel="stylesheet" href="assets/styles/style.css">
@@ -12,7 +12,22 @@
 </head>
 
 <body>
-    <div class="center">
+    <script src="assets/backend/LoadingController.js"></script>
+    <div class="loading" id="loading">
+        <div class="wycentrowane">
+            <center>
+            <svg style="margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 15 15">
+                <path fill="currentColor"
+                    d="M14.854.146a.5.5 0 0 1 .079.605l-3.841 6.634l-3.477-3.477L14.25.068a.5.5 0 0 1 .605.078M6.72 4.427l-1.97 1.14a.5.5 0 0 0-.104.787l4 4a.5.5 0 0 0 .787-.103l1.14-1.97zM.99 10.441a3.063 3.063 0 0 1 2.947-2.227H4a3 3 0 0 1 3 3v.053a2.947 2.947 0 0 1-2.947 2.947h-.08a2.59 2.59 0 0 1-1.115-.252a1.594 1.594 0 0 0-1.57.113l-.51.341a.5.5 0 0 1-.759-.553z" />
+            </svg><br><br>
+             </center>
+            <div id="progressBar">
+                <div id="bar"></div>
+              </div>
+        </div>
+    
+    </div>
+    <div class="center" id="maindupaview" style="display: none;">
         <div id="cnt">
             <div>
                 <div class="nav" id="nav-menu">
@@ -21,7 +36,7 @@
                             <path fill="currentColor"
                                 d="M14.854.146a.5.5 0 0 1 .079.605l-3.841 6.634l-3.477-3.477L14.25.068a.5.5 0 0 1 .605.078M6.72 4.427l-1.97 1.14a.5.5 0 0 0-.104.787l4 4a.5.5 0 0 0 .787-.103l1.14-1.97zM.99 10.441a3.063 3.063 0 0 1 2.947-2.227H4a3 3 0 0 1 3 3v.053a2.947 2.947 0 0 1-2.947 2.947h-.08a2.59 2.59 0 0 1-1.115-.252a1.594 1.594 0 0 0-1.57.113l-.51.341a.5.5 0 0 1-.759-.553z" />
                         </svg>
-                        ColorBJ 5.0
+                        ColorBJ 6.0
                     </div>
                     <div class="divider"></div>
                     <nav>
@@ -29,16 +44,16 @@
                             <li>
                                 <a class="ps" href="#">Plik</a>
                                 <ul id="dupa11">
-                                    <li><a onclick="showWindow3()">Zapisz Obraz</a></li>
-                                    <li><a onclick="showWindow6()">Otwórz Obraz</a></li>
+                                    <li><a onclick="showWindow(3)">Zapisz Obraz</a></li>
+                                    <li><a onclick="showWindow(6)">Otwórz Obraz</a></li>
                                     <li><a onclick="showWindow(11)">Nowy plik</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a class="ps" href="#">Informacje</a>
                                 <ul id="dupa12">
-                                    <li><a href="#" onclick="showWindow2()">Twórcy</a></li>
-                                    <li><a href="#" onclick="showWindow9()">Co nowego?</a></li>
+                                    <li><a href="#" onclick="showWindow(2)">Twórcy</a></li>
+                                    <li><a href="#" onclick="showWindow(9)">Co nowego?</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -53,7 +68,7 @@
                                 d="M14.854.146a.5.5 0 0 1 .079.605l-3.841 6.634l-3.477-3.477L14.25.068a.5.5 0 0 1 .605.078M6.72 4.427l-1.97 1.14a.5.5 0 0 0-.104.787l4 4a.5.5 0 0 0 .787-.103l1.14-1.97zM.99 10.441a3.063 3.063 0 0 1 2.947-2.227H4a3 3 0 0 1 3 3v.053a2.947 2.947 0 0 1-2.947 2.947h-.08a2.59 2.59 0 0 1-1.115-.252a1.594 1.594 0 0 0-1.57.113l-.51.341a.5.5 0 0 1-.759-.553z" />
                         </svg>
                     </div>
-                    <div class="tooltip fade icon" onclick="toggleRubberMode()" data-title="Gumka">
+                    <div class="tooltip fade icon" onclick="toggleRubberMode(); " data-title="Gumka">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="-1.5 -2.5 24 24">
                             <path fill="currentColor"
                                 d="M12.728 12.728L8.485 8.485l-5.657 5.657l2.122 2.121a3 3 0 0 0 4.242 0zM11.284 17H14a1 1 0 0 1 0 2H3a1 1 0 0 1-.133-1.991l-1.453-1.453a2 2 0 0 1 0-2.828L12.728 1.414a2 2 0 0 1 2.828 0L19.8 5.657a2 2 0 0 1 0 2.828z" />
@@ -93,6 +108,9 @@
                     <div class="tooltip fade icon" onclick="showWindow(17)" data-title="Zmień wymiary obrazu">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 14L12 17L15 14M15 10L12 7L9 10" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </div>
+                    <div class="tooltip fade icon" onclick="removeBackground();" data-title="Usuń tło">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><path fill="currentColor" d="M252 152a12 12 0 0 1-12 12h-12v12a12 12 0 0 1-24 0v-12h-12a12 12 0 0 1 0-24h12v-12a12 12 0 0 1 24 0v12h12a12 12 0 0 1 12 12M56 76h12v12a12 12 0 0 0 24 0V76h12a12 12 0 1 0 0-24H92V40a12 12 0 0 0-24 0v12H56a12 12 0 0 0 0 24m128 112h-4v-4a12 12 0 0 0-24 0v4h-4a12 12 0 0 0 0 24h4v4a12 12 0 0 0 24 0v-4h4a12 12 0 0 0 0-24m38.14-105.17L82.82 222.14a20 20 0 0 1-28.28 0l-20.69-20.68a20 20 0 0 1 0-28.29L173.17 33.86a20 20 0 0 1 28.28 0l20.69 20.68a20 20 0 0 1 0 28.29M159 112l-15-15l-90.35 90.31l15 15Zm43.31-43.31l-15-15L161 80l15 15Z"/></svg>
+                    </div>
                 </div>
                 <div id="container">
                     <canvas id="niepaintCanvas" width="1400" height="1100"></canvas>
@@ -101,62 +119,15 @@
         </div>
     </div>
 
+
     <div class="notification" id="rbContainer">
         <div class="notificationContainer">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                 <path fill="currentColor"
                     d="M12 17q.425 0 .713-.288T13 16v-4q0-.425-.288-.712T12 11q-.425 0-.712.288T11 12v4q0 .425.288.713T12 17m0-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22" />
             </svg>
-            <div style="margin-left: 10px;">
-                Przełączono na tryb pisaka
-            </div>
-        </div>
-    </div>
-
-    <div class="notification" id="rbContainer2">
-        <div class="notificationContainer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                <path fill="currentColor"
-                    d="M12 17q.425 0 .713-.288T13 16v-4q0-.425-.288-.712T12 11q-.425 0-.712.288T11 12v4q0 .425.288.713T12 17m0-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22" />
-            </svg>
-            <div style="margin-left: 10px;">
-                Przełączono na tryb gumki
-            </div>
-        </div>
-    </div>
-
-    <div class="notification" id="rbContainer3">
-        <div class="notificationContainer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                <path fill="currentColor"
-                    d="M12 17q.425 0 .713-.288T13 16v-4q0-.425-.288-.712T12 11q-.425 0-.712.288T11 12v4q0 .425.288.713T12 17m0-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22" />
-            </svg>
-            <div style="margin-left: 10px;">
-                Zmieniono Kolor
-            </div>
-        </div>
-    </div>
-
-    <div class="notification" id="rbContainer4">
-        <div class="notificationContainer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                <path fill="currentColor"
-                    d="M12 17q.425 0 .713-.288T13 16v-4q0-.425-.288-.712T12 11q-.425 0-.712.288T11 12v4q0 .425.288.713T12 17m0-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22" />
-            </svg>
-            <div style="margin-left: 10px;">
-                Plansza Wyczyszczona
-            </div>
-        </div>
-    </div>
-
-    <div class="notification" id="rbContainer5">
-        <div class="notificationContainer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                <path fill="currentColor"
-                    d="M12 17q.425 0 .713-.288T13 16v-4q0-.425-.288-.712T12 11q-.425 0-.712.288T11 12v4q0 .425.288.713T12 17m0-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22" />
-            </svg>
-            <div style="margin-left: 10px;">
-                Wypełniono planszę
+            <div style="margin-left: 10px;" id="notifvalue">
+                
             </div>
         </div>
     </div>
@@ -233,6 +204,10 @@
                 </div>
             </div>
             <div style="margin-left: 10px;">
+                <div id="aktunag">ColorBJ 1.0 (niepaint) </div>
+                <hr>
+                <div id="aktu">- Zmieniono system renderowania pola roboczego</div>
+                <div id="aktu">- Dodano możliwość otwierania obrazów</div>
 
                 <div id="aktunag">ColorBJ 2.0</div>
                 <hr>
@@ -276,6 +251,18 @@
                 <div id="aktu">- Ulepszono działanie navbara, po kliknięciu na plik albo informacje opcje, które są niżej się cały czas pokazują.</div>
                 <div id="aktu">- Dodano możliwość resizowania obrazu</div>
                 <div id="aktu">- Poprawiono błąd, po którym jak się zmieni kolor planszy to nie można pisać pisakiem.</div>
+                
+            </div>
+            <div id="bum">
+                <div id="aktunag">ColorBJ 6.0</div>
+                <hr>
+                <div id="aktu">- Dodano możliwość usuwania tła ze zdjęć </div>
+                <div id="aktu">- Wznowiono funkcję powiadomień </div>
+                <div id="aktu">- Dodano ekran ładowania</div>
+                <div id="aktu">- Po załadowaniu zdjęcia pole robocze jest automatycznie skalowane do jego rozdzielczości</div>
+                <div id="aktu">- Dodano brakującą wersję 1.0 w changelogu</div>
+                <div id="aktu">- Optymalizacje backendu</div>
+                <div id="aktu">- Zmiana systemu renderowania powiadomień</div>
                 
             </div>
             </div>
@@ -570,6 +557,30 @@
                     <label for="szerokosc: ">Szerokość: </label><input type="text" placeholder="512" id="szerokoscinput" style="margin: 15px;"><br>
                     <center><button onclick="customCanvasSize(); hideWindow(17)">Zmień wymiary</button></center>
                 
+                    
+       
+
+
+            </div>
+        </div>
+    </div>
+    <div class="windowContainer" id="windowContainer18" style="display: none;">
+        <div class="containerContent">
+            <div class="containerHeader">
+                <div style="display: flex; justify-items: center; color: #ff0000">
+                    <svg style="margin-right: 10px; color: fff;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22"/></svg>
+                    Problem z ColorBJ
+                </div>
+                <div class="close" onclick="hideWindow(18)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="m12 12.708l3.246 3.246q.14.14.344.15q.204.01.364-.15t.16-.354q0-.194-.16-.354L12.708 12l3.246-3.246q.14-.14.15-.344q.01-.204-.15-.364t-.354-.16q-.194 0-.354.16L12 11.292L8.754 8.046q-.14-.14-.344-.15q-.204-.01-.364.15t-.16.354q0 .194.16.354L11.292 12l-3.246 3.246q-.14.14-.15.344q-.01.204.15.364t.354.16q.194 0 .354-.16zM12.003 21q-1.866 0-3.51-.708q-1.643-.709-2.859-1.924q-1.216-1.214-1.925-2.856Q3 13.87 3 12.003q0-1.866.708-3.51q.709-1.643 1.924-2.859q1.214-1.216 2.856-1.925Q10.13 3 11.997 3q1.866 0 3.51.708q1.643.709 2.859 1.924q1.216 1.214 1.925 2.856Q21 10.13 21 11.997q0 1.866-.708 3.51q-.709 1.643-1.924 2.859q-1.214 1.216-2.856 1.925Q13.87 21 12.003 21" />
+                    </svg>
+                </div>
+            </div>
+            <div style="margin-left: 10px;" id="wymiarydupa">
+
+                <center><p id="bladinfo">Nietypowy błąd (0)</p></center>
                     
        
 
