@@ -229,14 +229,12 @@ nav ul li ul li a:hover {
     display: none;
 }
 #windowContainer9 {
-    max-height: 80vh;
-    overflow-y: auto; 
-    width: 50%; 
     display: none;
-    padding: 20px;
-    border-radius: 10px;
 }
-
+.dupnydiv{
+    max-height: 40vh !important;
+    overflow-y: scroll !important; 
+}
 
 #windowContainer10 {
     display: none;
@@ -521,3 +519,16 @@ nav ul li ul li a:hover {
 #progressBar{
     margin-left: 42vw;
 }
+.dupnydiv::-webkit-scrollbar {
+    width: 0.8em;
+    padding-left: 1vw;
+  }
+   
+  .dupnydiv::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+   
+  .dupnydiv::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    border-radius: 10px;
+  }
