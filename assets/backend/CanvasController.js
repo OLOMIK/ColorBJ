@@ -7,6 +7,9 @@ var blockSize = 5;
 var currentBackgroundColor = "#111111";
 var kolor = "#5e5e5e";
 var posListening = false;
+var pastePosListening = false;
+var pastePosY;
+var pastePosX;
 
 function setCanvasSize() {
     canvasWidth = window.innerWidth < 768 ? window.innerWidth - 70 : 1200;
@@ -239,6 +242,9 @@ function setupDragAndDrop() {
 function dupa() {
     posListening = true;
 }
+function startPastePosSelecting(){
+    pastePosListening = true;
+}
 
 document.getElementById('niepaintCanvas').onclick = function(e) {
     if (posListening) {
@@ -250,6 +256,19 @@ document.getElementById('niepaintCanvas').onclick = function(e) {
         document.getElementById("posy").value = y;
         posListening = false;
         const container = document.getElementById('windowContainer7');
+        container.style.display = 'block';
+        startPainting();
+        
+    }
+    if (pastePosListening) {
+        stopPainting();
+        const container = document.getElementById('windowContainer20');
+        var rect = e.target.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        document.getElementById("posxx").value = x;
+        document.getElementById("posyy").value = y;
+        pastePosListening = false;
         container.style.display = 'block';
         startPainting();
         
@@ -296,7 +315,7 @@ async function removeBackground() {
         resultImage.src = urlObject;
         Notification("Usunięto tło z obrazu.");
     } catch (error) {
-        const container = document.getElementById('windowContainer7');
+        const container = document.getElementById('windowContainer18');
         container.style.display = 'block';
         container.innerHTML = "Błąd komunikacji z API usuwania tła. Spróbuj ponownie później."
     }
@@ -311,6 +330,104 @@ function dataURItoBlob(dataURI) {
     }
     return new Blob([ab], { type: mimeString });
 }
+async function sendOpinion(){
+    let content = document.getElementById("trescinput").value.replace(" ", "+");
+    let email = document.getElementById("emailinput").value.replace(" ", "+");
+    try{
+        let url = `http://site30133.web1.titanaxe.com/addopinion.php?opinia=${content}&email=${email}`;
+        console.log(url);
+        await fetch(url, { method: 'GET' });
+        Notification("Wysłano opinię.");
+    } catch (error) {
+        const container = document.getElementById('windowContainer18');
+        container.style.display = 'block';
+        container.innerHTML = "Nie udało się wysłać opinii, bardzo możliwe, że jesteś offline, lub wsparcie dla twojej wersji ColorBJ zostało zakończone.";
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('niepaintCanvas');
+    const ctx = canvas.getContext('2d');
+
+    document.addEventListener('paste', async (event) => {
+        const items = event.clipboardData.items;
+        for (const item of items) {
+            if (item.type.startsWith('image/')) {
+                const blob = item.getAsFile();
+                pastedImage = await blobToImage(blob);
+                showWindow(20);
+            }
+        }
+    });
+    
+    document.addEventListener('copy', async (event) => {
+        const items = event.clipboardData.items;
+        for (const item of items) {
+            if (item.type.startsWith('image/')) {
+                const blob = item.getAsFile();
+                pastedImage = await blobToImage(blob);
+                showWindow(20);
+            }
+        }
+    });
+
+    function blobToImage(blob) {
+        return new Promise((resolve, reject) => {
+            const url = URL.createObjectURL(blob);
+            const img = new Image();
+            img.onload = () => {
+                URL.revokeObjectURL(url);
+                resolve(img);
+            };
+            img.onerror = (err) => {
+                URL.revokeObjectURL(url);
+                reject(err);
+            };
+            img.src = url;
+        });
+    }
+    document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.key === 'c') {
+            copyCanvasToClipboard();
+        }
+    });
+    
+    function copyCanvasToClipboard() {
+        canvas.toBlob(blob => {
+            const item = new ClipboardItem({ 'image/png': blob });
+            navigator.clipboard.write([item]).then(() => {
+                Notification("Skopiowano zawartość canvasa do schowka.");
+            }).catch(err => {
+                sendError("Nie udało się skopiować canvasa do schowka<br>Błąd: "+err);
+            });
+        });
+    }
+    async function ustawSchowek(){
+        const items = navigator.clipboard.read();
+        for (const item of items) {
+            if (item.type.startsWith('image/')) {
+                const blob = item.getAsFile();
+                const img = await blobToImage(blob);
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            }
+        }
+    }
+});
+
+document.getElementById('wstawiaj').addEventListener('click', () => {
+    const x = parseInt(document.getElementById('posxx').value);
+    const y = parseInt(document.getElementById('posyy').value);
+    if (pastedImage) {
+        ctx.drawImage(pastedImage, x, y, pastedImage.width, pastedImage.height);
+        pastedImage = null; 
+    }
+});
+
+
+
+
+
+
+
 window.onload = function() {
     setupCanvas();
     setupDragAndDrop();

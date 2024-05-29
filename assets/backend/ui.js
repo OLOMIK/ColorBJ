@@ -17,3 +17,8 @@ async function Notification(text){
     container.style.display='block'
     setTimeout(function(){container.style.display='none'}, 3000)
 }
+function sendError(message){
+    const container = document.getElementById('windowContainer18');
+    container.style.display = 'block';
+    container.innerHTML = message;
+}
