@@ -1,16 +1,85 @@
 const { app, BrowserWindow, Notification } = require('electron');
 const https = require('https');
 const url = 'https://crystalx.pl/colorbj/lts-version.txt';
-
+const DiscordRPC = require('discord-rpc');
+const clientId = '1245328919071297679';
+const packageJson = require('./package.json');
 let mainWindow;
 
-const createWindow = () => {
-  mainWindow = new BrowserWindow({
-    autoHideMenuBar: true,
-    icon: "niepaint.ico"
+DiscordRPC.register(clientId);
+
+const rpc = new DiscordRPC.Client({ transport: 'ipc' });
+
+async function setActivity() {
+  if (!rpc || !app.isReady()) return;
+
+  rpc.setActivity({
+    details: "Edytuje obraz",
+    state: "Używając ColorBJ",
+    startTimestamp: new Date(),
+    largeImageKey: "colorbj", 
+    largeImageText: "ColorBJ",
+    smallImageKey: "colorbj",
+    smallImageText: "Wersja klienta: " + packageJson.version,
+    instance: false,
   });
-  mainWindow.maximize();
+}
+
+rpc.on('ready', () => {
+  console.log("Discord RPC is ready");
+  setActivity();
+});
+
+rpc.on('error', (error) => {
+  console.error("Discord RPC error:", error);
+});
+
+rpc.login({ clientId }).catch(console.error);   
+
+const createWindow = () => {
+  var splash = new BrowserWindow({
+    width: 500, 
+    height: 300, 
+    transparent: true, 
+    frame: false, 
+    alwaysOnTop: true 
+  });
+  splash.loadFile('assets/splashScreen.html');
+
+  mainWindow = new BrowserWindow({
+    show: false, 
+    autoHideMenuBar: true,
+    icon: "niepaint.ico",
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  });
+  
   mainWindow.loadFile('index.html');
+    
+  let splashShown = false;
+
+  splash.once('show', () => {
+    splashShown = true;
+  });
+
+  mainWindow.once('ready-to-show', () => {
+    setTimeout(() => {
+      if (splash && !splash.isDestroyed()) {
+        splash.close();
+      }
+      mainWindow.maximize();
+      mainWindow.show();
+      mainWindow.focus();
+    }, 3000); 
+  });
+
+  setTimeout(() => {
+    if (!splashShown) {
+      splash.show();
+    }
+  }, 100); 
 };
 
 app.on('ready', () => {
@@ -49,7 +118,6 @@ function checkForUpdates() {
 }
 
 function compareVersions(remoteVersion) {
-  const packageJson = require('./package.json');
   const localVersion = packageJson.version;
 
   if (remoteVersion > localVersion) {

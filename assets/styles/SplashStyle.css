@@ -1,0 +1,9 @@
+body{
+    background-color: #000;
+
+}
+svg{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}

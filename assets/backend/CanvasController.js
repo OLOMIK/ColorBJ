@@ -389,6 +389,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.ctrlKey && event.key === 'c') {
             copyCanvasToClipboard();
         }
+        if (event.ctrlKey && event.key === 'p') {
+            event.preventDefault();
+            printCanvas();
+        }
     });
     
     function copyCanvasToClipboard() {
@@ -421,7 +425,26 @@ document.getElementById('wstawiaj').addEventListener('click', () => {
         pastedImage = null; 
     }
 });
+function printCanvas() {
+    var canvas = document.getElementById('niepaintCanvas');
+    var dataUrl = canvas.toDataURL();
 
+    var windowContent = '<!DOCTYPE html>';
+    windowContent += '<html>';
+    windowContent += '<head><title>Print Canvas</title></head>';
+    windowContent += '<body>';
+    windowContent += '<img src="' + dataUrl + '">';
+    windowContent += '</body>';
+    windowContent += '</html>';
+
+    var printWin = window.open('', '', 'width=800,height=600');
+    printWin.document.open();
+    printWin.document.write(windowContent);
+    printWin.document.close();
+    printWin.focus();
+    printWin.print();
+    printWin.close();
+}
 
 
 

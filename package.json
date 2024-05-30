@@ -1,6 +1,6 @@
 {
   "name": "colorbj",
-  "version": "7.0",
+  "version": "8.0",
   "description": "ColorBJ",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,8 @@
   "author": "crystalx, gasnic",
   "license": "ISC",
   "dependencies": {
+    "@trodi/electron-splashscreen": "^1.0.2",
+    "discord-rpc": "^4.0.1",
     "electron": "^29.4.1",
     "fs": "^0.0.1-security"
   },
