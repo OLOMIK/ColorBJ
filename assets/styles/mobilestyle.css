@@ -1,0 +1,55 @@
+.panelsrodkowy {
+    padding: 10% !important;
+    background-color: #242424 !important;
+    position: fixed !important;
+    inset: 0px !important;
+    width: 80vw !important;
+    max-width: 300px !important;
+    height: auto !important;
+    max-height: 100vh !important;
+    margin: auto !important;
+    display: grid !important;
+    place-content: center !important;
+    border-radius: 15px !important;
+    -webkit-border-radius: 15px !important;
+    -moz-border-radius: 15px !important;
+    -ms-border-radius: 15px !important;
+    -o-border-radius: 15px !important;
+}
+.sidebar{
+    max-height: 90vh !important;
+    overflow-y: auto !important; 
+    overflow-x: hidden;
+}
+.panelsrodkowy button {
+    margin: 5px !important;
+    padding: 10px 20px !important; /* Ensure buttons have adequate padding */
+    font-size: 1rem !important; /* Make button text size responsive */
+    width: 100% !important; /* Ensure buttons take full width for better touch interaction */
+    box-sizing: border-box !important; /* Make sure padding and border are included in the width */
+}
+
+/* Ensure text is centered and adjusts to screen size */
+.panelsrodkowy h1, .panelsrodkowy p {
+    text-align: center !important;
+    margin: 0 0 10px 0 !important; /* Ensure spacing between elements */
+    font-size: 1.5rem !important; /* Adjust font size for better readability */
+}
+
+/* Adjustments for small screens */
+@media (max-width: 600px) {
+    .panelsrodkowy  {
+        width: 90vw !important; 
+        max-width: 100% !important; 
+        padding: 5% !important;
+    }
+    
+    .panelsrodkowy h1, .panelsrodkowy p {
+        font-size: 1.2rem !important;
+    }
+    
+    .panelsrodkowy button {
+        font-size: 0.9rem !important;
+        padding: 8px 16px !important;
+    }
+}

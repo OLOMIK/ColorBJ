@@ -8,30 +8,56 @@ var currentBackgroundColor = "#111111";
 var kolor = "#5e5e5e";
 var posListening = false;
 var pastePosListening = false;
+var shapePosListening = false;
 var pastePosY;
 var pastePosX;
+var offscreenCanvas = document.createElement('canvas');
+var offscreenCtx = offscreenCanvas.getContext('2d');
+var points = [];
 
 function setCanvasSize() {
+    offscreenCanvas.width = canvas.width;
+    offscreenCanvas.height = canvas.height;
+    offscreenCtx.drawImage(canvas, 0, 0);
+    
     canvasWidth = window.innerWidth < 768 ? window.innerWidth - 70 : 1200;
     canvasHeight = window.innerWidth < 768 ? 600 : 800;
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
     ctx.fillStyle = currentBackgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.drawImage(offscreenCanvas, 0, 0, offscreenCanvas.width, offscreenCanvas.height, 0, 0, canvas.width, canvas.height);
 }
-function customCanvasSize(){
+
+function customCanvasSize() {
+    offscreenCanvas.width = canvas.width;
+    offscreenCanvas.height = canvas.height;
+    offscreenCtx.drawImage(canvas, 0, 0);
+
     canvas.width = document.getElementById("dlugoscinput").value;
     canvas.height = document.getElementById("szerokoscinput").value;
     ctx.fillStyle = currentBackgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    Notification("Zmieniono rozmiary pola roboczego.")
+    
+    ctx.drawImage(offscreenCanvas, 0, 0, offscreenCanvas.width, offscreenCanvas.height, 0, 0, canvas.width, canvas.height);
+    Notification("Zmieniono rozmiary pola roboczego.");
 }
-function customSize2(w, h){
+
+
+function customSize2(w, h) {
+    offscreenCanvas.width = canvas.width;
+    offscreenCanvas.height = canvas.height;
+    offscreenCtx.drawImage(canvas, 0, 0);
+
     canvas.width = w;
     canvas.height = h;
     ctx.fillStyle = currentBackgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.drawImage(offscreenCanvas, 0, 0, offscreenCanvas.width, offscreenCanvas.height, 0, 0, canvas.width, canvas.height);
 }
+
 function setBlockSize(size) {
     blockSize = size;
 }
@@ -40,11 +66,11 @@ document.getElementById("wyb").addEventListener('change', function() {
     ustawkolor(this.value);
 });
 
+
 function setupCanvas() {
     canvas = document.getElementById('niepaintCanvas');
     if (!canvas) {
         console.error('Nie znaleziono elementu canvas!');
-        console.log("wystąpił błąd podczas ładowania edytora");
         return;
     }
     ctx = canvas.getContext('2d');
@@ -66,33 +92,64 @@ function ustawkolor(color) {
 
 function startPainting(event) {
     painting = true;
+    [lastX, lastY] = getMousePos(event);
     paint(event);
 }
-
 function stopPainting() {
+    if (!painting) return;
     painting = false;
+
+    if (points.length > 1) {
+        const simplifiedPoints = simplifyLine(points, 2);
+
+        offscreenCanvas.width = canvas.width;
+        offscreenCanvas.height = canvas.height;
+        offscreenCtx.drawImage(canvas, 0, 0);
+
+
+        ctx.strokeStyle = rubberMode ? currentBackgroundColor : kolor;
+        ctx.lineWidth = blockSize;
+        ctx.lineCap = 'round';
+
+        ctx.beginPath();
+        ctx.moveTo(simplifiedPoints[0][0], simplifiedPoints[0][1]);
+        for (let i = 1; i < simplifiedPoints.length; i++) {
+            ctx.lineTo(simplifiedPoints[i][0], simplifiedPoints[i][1]);
+        }
+        ctx.stroke();
+
+        
+        offscreenCtx.drawImage(canvas, 0, 0);
+    }
+
+    points = [];
 }
+
+
+
+
 
 function paint(event) {
     if (!painting) return;
 
-    var x, y;
+    var [x, y] = getMousePos(event);
+    points.push([x, y]);
 
-    if (event.touches) {
-        x = event.touches[0].pageX - canvas.offsetLeft;
-        y = event.touches[0].pageY - canvas.offsetTop;
-    } else {
-        x = event.pageX - canvas.offsetLeft;
-        y = event.pageY - canvas.offsetTop;
-    }
-
-    ctx.fillStyle = rubberMode ? currentBackgroundColor : kolor;
-    ctx.fillRect(x, y, blockSize, blockSize);
+    ctx.strokeStyle = rubberMode ? currentBackgroundColor : kolor;
+    ctx.lineWidth = blockSize;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    [lastX, lastY] = [x, y];
 }
+
+
 
 function touchPaint(e) {
     e.preventDefault();
-    paint(e);
+    paint(e.touches[0]);
 }
 
 function toggleRubberMode() {
@@ -103,7 +160,17 @@ function toggleRubberMode() {
 function disableRubberMode() {
     rubberMode = false;
 }
-
+function getMousePos(event) {
+    var x, y;
+    if (event.touches) {
+        x = event.touches[0].pageX - canvas.offsetLeft;
+        y = event.touches[0].pageY - canvas.offsetTop;
+    } else {
+        x = event.pageX - canvas.offsetLeft;
+        y = event.pageY - canvas.offsetTop;
+    }
+    return [x, y];
+}
 function fillSzachownica() {
     
     var kolorInput = document.getElementById("colorSel").value;
@@ -245,6 +312,9 @@ function dupa() {
 function startPastePosSelecting(){
     pastePosListening = true;
 }
+function startShapePosSelecting(){
+    shapePosListening = true;
+}
 
 document.getElementById('niepaintCanvas').onclick = function(e) {
     if (posListening) {
@@ -269,6 +339,19 @@ document.getElementById('niepaintCanvas').onclick = function(e) {
         document.getElementById("posxx").value = x;
         document.getElementById("posyy").value = y;
         pastePosListening = false;
+        container.style.display = 'block';
+        startPainting();
+        
+    }
+    if (shapePosListening) {
+        stopPainting();
+        const container = document.getElementById('windowContainer26');
+        var rect = e.target.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        document.getElementById("xxx").value = x;
+        document.getElementById("yyy").value = y;
+        shapePosListening = false;
         container.style.display = 'block';
         startPainting();
         
@@ -445,8 +528,47 @@ function printCanvas() {
     printWin.print();
     printWin.close();
 }
+function drawShape(index) {
+    var canvas = document.getElementById('niepaintCanvas');
+    var ctx = canvas.getContext("2d");
 
+    if (index < 0 || index >= ksztalty.length) {
+        console.error('Invalid shape index');
+        return;
+    }
 
+    var icon = ksztalty[index].replace("width=\"32\" height=\"32\"", "width=\"128\" height=\"128\"");
+    const svgBase64 = `data:image/svg+xml;base64,${btoa(icon)}`;
+
+    const img = new Image();
+    img.onload = () => {
+        const x = parseInt(document.getElementById("xxx").value, 10);
+        const y = parseInt(document.getElementById("yyy").value, 10);
+
+        ctx.drawImage(img, x, y);
+        hideWindow(26);
+        Notification("Wstawiono wybrany kształt na canvas.")
+    };
+    img.src = svgBase64;
+}
+function createButtons() {
+    var container = document.getElementById('ksztaltdupy');
+    container.innerHTML = '';
+
+    ksztalty.forEach((ksztalt, index) => {
+        var button = document.createElement('button');
+        button.innerHTML = ksztalt;
+        button.classList.add('ksztalt-button');
+        button.dataset.index = index;
+        button.style.margin = "5px"
+        button.addEventListener('click', function() {
+            var index = parseInt(this.dataset.index, 10);
+            drawShape(index);
+        });
+        container.appendChild(button);
+    });
+}
+createButtons();
 
 
 

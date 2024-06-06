@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Notification } = require('electron');
+const { app, BrowserWindow, Notification, shell } = require('electron');
 const https = require('https');
 const url = 'https://crystalx.pl/colorbj/lts-version.txt';
 const DiscordRPC = require('discord-rpc');
@@ -57,7 +57,15 @@ const createWindow = () => {
   });
   
   mainWindow.loadFile('index.html');
-    
+  
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    if (url.startsWith('https://discord.com')) {
+      event.preventDefault();
+      shell.openExternal('https://discord.gg/hveD8v9gk2');
+      mainWindow.loadFile('index.html');
+    }
+  });
+
   let splashShown = false;
 
   splash.once('show', () => {
@@ -120,9 +128,24 @@ function checkForUpdates() {
 function compareVersions(remoteVersion) {
   const localVersion = packageJson.version;
 
-  if (remoteVersion > localVersion) {
+  if (isVersionGreater(remoteVersion, localVersion)) {
     showUpdateNotification(remoteVersion);
   }
+}
+
+function isVersionGreater(remote, local) {
+  const remoteParts = remote.split('.').map(Number);
+  const localParts = local.split('.').map(Number);
+
+  for (let i = 0; i < remoteParts.length; i++) {
+    if (remoteParts[i] > (localParts[i] || 0)) {
+      return true;
+    } else if (remoteParts[i] < (localParts[i] || 0)) {
+      return false;
+    }
+  }
+
+  return false;
 }
 
 function showUpdateNotification(rv) {
@@ -133,7 +156,7 @@ function showUpdateNotification(rv) {
   });
 
   notification.onclick = () => {
-    require('electron').shell.openExternal("https://github.com/OLOMIK/ColorBJ/");
+    shell.openExternal("https://github.com/OLOMIK/ColorBJ/");
   };
 
   notification.show();
