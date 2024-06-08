@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ColorBJ 10.0</title>
+    <title>ColorBJ 11.0</title>
 
     <link rel="shortcut icon" href="niepaint.ico" type="image/x-icon">
     <link rel="stylesheet" href="assets/styles/style.css">
@@ -15,6 +15,8 @@
     <script src="assets/backend/LoadingController.js"></script>
     <script src="assets/backend/shapelist.js"></script>
     <script src="assets/backend/ulepszLinie.js"></script>
+    <script src="assets/backend/convertMarkdown.js"></script>
+    <script src="assets/backend/inne.js"></script>
     <div class="welcome" id="welcome">
         <div class="panelsrodkowy">
             <h1>Witamy w ColorBJ</h1>
@@ -47,7 +49,7 @@
                             <path fill="currentColor"
                                 d="M14.854.146a.5.5 0 0 1 .079.605l-3.841 6.634l-3.477-3.477L14.25.068a.5.5 0 0 1 .605.078M6.72 4.427l-1.97 1.14a.5.5 0 0 0-.104.787l4 4a.5.5 0 0 0 .787-.103l1.14-1.97zM.99 10.441a3.063 3.063 0 0 1 2.947-2.227H4a3 3 0 0 1 3 3v.053a2.947 2.947 0 0 1-2.947 2.947h-.08a2.59 2.59 0 0 1-1.115-.252a1.594 1.594 0 0 0-1.57.113l-.51.341a.5.5 0 0 1-.759-.553z" />
                         </svg>
-                        ColorBJ 10.0
+                        ColorBJ 11.0
                     </div>
                     <div class="divider" id="guipctowe"></div>
                     <button onclick="showWindow(25);" id="guiMobilneButton">Pokaż GUI mobilne</button>
@@ -58,6 +60,8 @@
                                 <ul id="dupa11">
                                     <li><a onclick="showWindow(3)">Zapisz Obraz</a></li>
                                     <li><a onclick="showWindow(6)">Otwórz Obraz</a></li>
+                                    <li><a onclick="showWindow(27)">Ustawienia</a></li>
+                                    <li><a onclick="showWindow(29)">Załaduj skrypt</a></li>
                                     <li><a onclick="showWindow(11)">Nowy plik</a></li>
                                     <li><a onclick="printCanvas()">Drukuj</a></li>
                                 </ul>
@@ -77,84 +81,87 @@
                     </nav>
                 </div>
                 
-            <div id="ass">
-                <div class="sidebar">
-                    <div class="tooltip fade icon" onclick="disableRubberMode()" data-title="Pędzel">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 15 15">
-                            <path fill="currentColor"
-                                d="M14.854.146a.5.5 0 0 1 .079.605l-3.841 6.634l-3.477-3.477L14.25.068a.5.5 0 0 1 .605.078M6.72 4.427l-1.97 1.14a.5.5 0 0 0-.104.787l4 4a.5.5 0 0 0 .787-.103l1.14-1.97zM.99 10.441a3.063 3.063 0 0 1 2.947-2.227H4a3 3 0 0 1 3 3v.053a2.947 2.947 0 0 1-2.947 2.947h-.08a2.59 2.59 0 0 1-1.115-.252a1.594 1.594 0 0 0-1.57.113l-.51.341a.5.5 0 0 1-.759-.553z" />
-                        </svg>
+                <div id="ass">
+                    <div class="sidebar">
+                        <div class="tooltip fade icon" onclick="disableRubberMode()" data-title="Pędzel">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 15 15">
+                                <path fill="currentColor"
+                                    d="M14.854.146a.5.5 0 0 1 .079.605l-3.841 6.634l-3.477-3.477L14.25.068a.5.5 0 0 1 .605.078M6.72 4.427l-1.97 1.14a.5.5 0 0 0-.104.787l4 4a.5.5 0 0 0 .787-.103l1.14-1.97zM.99 10.441a3.063 3.063 0 0 1 2.947-2.227H4a3 3 0 0 1 3 3v.053a2.947 2.947 0 0 1-2.947 2.947h-.08a2.59 2.59 0 0 1-1.115-.252a1.594 1.594 0 0 0-1.57.113l-.51.341a.5.5 0 0 1-.759-.553z" />
+                            </svg>
+                        </div>
+                        <div class="tooltip fade icon" onclick="toggleRubberMode(); " data-title="Gumka">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="-1.5 -2.5 24 24">
+                                <path fill="currentColor"
+                                    d="M12.728 12.728L8.485 8.485l-5.657 5.657l2.122 2.121a3 3 0 0 0 4.242 0zM11.284 17H14a1 1 0 0 1 0 2H3a1 1 0 0 1-.133-1.991l-1.453-1.453a2 2 0 0 1 0-2.828L12.728 1.414a2 2 0 0 1 2.828 0L19.8 5.657a2 2 0 0 1 0 2.828z" />
+                            </svg>
+                        </div>
+                        <div class="tooltip fade icon" onclick="showWindow(1)" data-title="Wybierz Kolor">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
+                                <path
+                                    d="M256 64C150.401 64 64 150.401 64 256c0 105.604 86.401 192 192 192 18.136 0 32-13.864 32-32 0-8.531-3.198-16-8.531-21.333-5.333-5.334-8.531-12.803-8.531-21.334 0-18.135 13.864-32 32-32h38.396c58.667 0 106.667-48 106.667-106.666C448 140.802 361.604 64 256 64zM138.667 256c-18.136 0-32-13.864-32-32s13.864-32 32-32c18.135 0 32 13.864 32 32s-13.865 32-32 32zm64-85.333c-18.136 0-32-13.865-32-32 0-18.136 13.864-32 32-32 18.135 0 32 13.864 32 32 0 18.135-13.865 32-32 32zm106.666 0c-18.135 0-32-13.865-32-32 0-18.136 13.865-32 32-32 18.136 0 32 13.864 32 32 0 18.135-13.864 32-32 32zm64 85.333c-18.135 0-32-13.864-32-32s13.865-32 32-32c18.136 0 32 13.864 32 32s-13.864 32-32 32z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="tooltip fade icon" onclick="showWindow(4)" data-title="Wyczyść Wszystko">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 56 56">
+                                <path fill="currentColor"
+                                    d="M4.106 17.09h47.788c2.649 0 3.985-1.57 3.985-4.195V10.62c0-2.625-1.336-4.195-3.985-4.195H4.106C1.598 6.426.12 7.996.12 10.62v2.274c0 2.625 1.336 4.195 3.985 4.195m11.601 32.484h24.586c4.617 0 6.469-2.437 7.148-6.984l3.352-22.313H5.231L8.558 42.59c.703 4.57 2.53 6.984 7.148 6.984m5.555-7.242c-1.055 0-1.875-.867-1.875-1.898c0-.516.21-.938.562-1.29l5.39-5.437l-5.39-5.46a1.734 1.734 0 0 1-.562-1.29c0-1.008.843-1.828 1.875-1.828c.492 0 .914.21 1.265.539l5.461 5.438l5.485-5.462c.398-.351.797-.562 1.265-.562c1.055 0 1.899.82 1.899 1.875c0 .492-.211.89-.586 1.266l-5.414 5.484l5.39 5.414c.352.375.586.773.586 1.313c0 1.03-.843 1.898-1.875 1.898c-.539 0-.96-.258-1.312-.586l-5.438-5.414l-5.437 5.414c-.328.352-.797.586-1.29.586" />
+                            </svg>
+                        </div>
+                        <div class="tooltip fade icon" onclick="showWindow(5)" data-title="Ustaw Kolor Planszy">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16">
+                                <path fill="currentColor" fill-rule="evenodd"
+                                    d="M11.773 7.412c-.064.064-.27.249-1.017-.027c-.75-.277-1.706-.928-2.695-1.918c-.99-.99-1.64-1.945-1.918-2.695c-.276-.747-.091-.953-.027-1.017c.064-.064.27-.249 1.017.027c.094.035.19.075.29.121c.7.324 1.54.93 2.405 1.797c.99.99 1.641 1.945 1.918 2.695c.276.747.091.953.027 1.017M7 6.528c.85.85 1.738 1.535 2.581 1.972H1.694v-.027a1.292 1.292 0 0 1 .1-.507l2.802-4.33c.056-.087.114-.174.172-.26C5.16 4.383 5.956 5.485 7 6.529Zm3.89-3.889c2.147 2.148 3.24 4.537 1.944 5.834a12.976 12.976 0 0 1-2.127 1.719L6.352 13.01s-1.945 1.296-4.537-1.296C-.778 9.12.518 7.175.518 7.175L3.336 2.82A12.98 12.98 0 0 1 5.056.694C6.351-.602 8.74.491 10.888 2.64Zm1.86 12.36c.966 0 1.75-.765 1.75-1.71c0-1.234-1.17-2.76-1.512-3.178a.304.304 0 0 0-.237-.111a.31.31 0 0 0-.24.112c-.34.422-1.511 1.96-1.511 3.178c0 .944.784 1.71 1.75 1.71Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="tooltip fade icon" onclick="showWindow(7)" data-title="Wstaw Tekst">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M2 24v-4h20v4zm3.5-7l5.25-14h2.5l5.25 14h-2.4l-1.25-3.6H9.2L7.9 17zm4.4-5.6h4.2l-2.05-5.8h-.1z"/>
+                            </svg>
+                        </div>
+                        <div class="tooltip fade icon" onclick="showWindow(26)" data-title="Wstaw kształt">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="m2 11l5-9l5 9zm5 10q-1.65 0-2.825-1.175T3 17q0-1.65 1.175-2.825T7 13q1.65 0 2.825 1.175T11 17q0 1.65-1.175 2.825T7 21m6 0v-8h8v8zm1.4-10.5L13 9.1l2.6-2.6L13 3.9l1.4-1.4L17 5.1l2.6-2.6L21 3.9l-2.6 2.6L21 9.1l-1.4 1.4L17 7.9z"/>
+                            </svg>
+                        </div>
+                        <div class="tooltip fade icon" onclick="showWindow(8)" data-title="Rozmiar Pisaka i Gumki">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 56 56"><path fill="currentColor" fill-rule="evenodd" d="M42.84 16.12L16.12 42.84h5.526a2.08 2.08 0 1 1 0 4.16H11.248l-.074-.001a2.074 2.074 0 0 1-1.544-.608a2.071 2.071 0 0 1-.602-1.3A2.094 2.094 0 0 1 9 44.752V34.354a2.08 2.08 0 1 1 4.16 0v5.567l26.76-26.762h-5.566a2.08 2.08 0 1 1 0-4.159h10.398c.116 0 .229.01.34.028c.473.038.936.239 1.299.602c.425.424.627.987.608 1.544l.001.074v10.398a2.08 2.08 0 1 1-4.16 0z"/></svg>
+                        </div>
+                        <div class="tooltip fade icon" onclick="showWindow(10)" data-title="Zmień kolory obrazu">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21q-3.325 0-5.663-2.312T4 13.1q0-1.65.625-3.05t1.725-2.5L12 2l5.65 5.55q1.1 1.1 1.725 2.5T20 13.1q0 3.275-2.337 5.588T12 21m0-2V4.8L7.75 9q-.875.825-1.312 1.863T6 13.1q0 2.425 1.75 4.163T12 19"/></svg>
+                        </div>
+                        <div class="tooltip fade icon" onclick="showWindow(17)" data-title="Zmień wymiary obrazu">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 14L12 17L15 14M15 10L12 7L9 10" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <div class="tooltip fade icon" onclick="removeBackground();" data-title="Usuń tło">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><path fill="currentColor" d="M252 152a12 12 0 0 1-12 12h-12v12a12 12 0 0 1-24 0v-12h-12a12 12 0 0 1 0-24h12v-12a12 12 0 0 1 24 0v12h12a12 12 0 0 1 12 12M56 76h12v12a12 12 0 0 0 24 0V76h12a12 12 0 1 0 0-24H92V40a12 12 0 0 0-24 0v12H56a12 12 0 0 0 0 24m128 112h-4v-4a12 12 0 0 0-24 0v4h-4a12 12 0 0 0 0 24h4v4a12 12 0 0 0 24 0v-4h4a12 12 0 0 0 0-24m38.14-105.17L82.82 222.14a20 20 0 0 1-28.28 0l-20.69-20.68a20 20 0 0 1 0-28.29L173.17 33.86a20 20 0 0 1 28.28 0l20.69 20.68a20 20 0 0 1 0 28.29M159 112l-15-15l-90.35 90.31l15 15Zm43.31-43.31l-15-15L161 80l15 15Z"/></svg>
+                        </div>
+                        <div class="tooltip fade icon" onclick="showWindow(28);" data-title="Wstaw gradient">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm6-10v2h2v-2zm-4 0v2h2v-2zm2 2v2h2v-2zm4 0v2h2v-2zm-8 0v2h2v-2zm10-2v2h2v2h2v-2h-2v-2zm-8 4v2H5v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h-2v-2h-2v2h-2v-2h-2v2H9v-2zm12-4v2zm0 4v2z"/></svg>
+                        </div>
                     </div>
-                    <div class="tooltip fade icon" onclick="toggleRubberMode(); " data-title="Gumka">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="-1.5 -2.5 24 24">
-                            <path fill="currentColor"
-                                d="M12.728 12.728L8.485 8.485l-5.657 5.657l2.122 2.121a3 3 0 0 0 4.242 0zM11.284 17H14a1 1 0 0 1 0 2H3a1 1 0 0 1-.133-1.991l-1.453-1.453a2 2 0 0 1 0-2.828L12.728 1.414a2 2 0 0 1 2.828 0L19.8 5.657a2 2 0 0 1 0 2.828z" />
-                        </svg>
+                    <div id="container">
+                        <canvas id="niepaintCanvas" width="1400" height="1100"></canvas>
                     </div>
-                    <div class="tooltip fade icon" onclick="showWindow()" data-title="Wybierz Kolor">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
-                            <path
-                                d="M256 64C150.401 64 64 150.401 64 256c0 105.604 86.401 192 192 192 18.136 0 32-13.864 32-32 0-8.531-3.198-16-8.531-21.333-5.333-5.334-8.531-12.803-8.531-21.334 0-18.135 13.864-32 32-32h38.396c58.667 0 106.667-48 106.667-106.666C448 140.802 361.604 64 256 64zM138.667 256c-18.136 0-32-13.864-32-32s13.864-32 32-32c18.135 0 32 13.864 32 32s-13.865 32-32 32zm64-85.333c-18.136 0-32-13.865-32-32 0-18.136 13.864-32 32-32 18.135 0 32 13.864 32 32 0 18.135-13.865 32-32 32zm106.666 0c-18.135 0-32-13.865-32-32 0-18.136 13.865-32 32-32 18.136 0 32 13.864 32 32 0 18.135-13.864 32-32 32zm64 85.333c-18.135 0-32-13.864-32-32s13.865-32 32-32c18.136 0 32 13.864 32 32s-13.864 32-32 32z"
-                                fill="currentColor" />
-                        </svg>
-                    </div>
-                    <div class="tooltip fade icon" onclick="showWindow(4)" data-title="Wyczyść Wszystko">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 56 56">
-                            <path fill="currentColor"
-                                d="M4.106 17.09h47.788c2.649 0 3.985-1.57 3.985-4.195V10.62c0-2.625-1.336-4.195-3.985-4.195H4.106C1.598 6.426.12 7.996.12 10.62v2.274c0 2.625 1.336 4.195 3.985 4.195m11.601 32.484h24.586c4.617 0 6.469-2.437 7.148-6.984l3.352-22.313H5.231L8.558 42.59c.703 4.57 2.53 6.984 7.148 6.984m5.555-7.242c-1.055 0-1.875-.867-1.875-1.898c0-.516.21-.938.562-1.29l5.39-5.437l-5.39-5.46a1.734 1.734 0 0 1-.562-1.29c0-1.008.843-1.828 1.875-1.828c.492 0 .914.21 1.265.539l5.461 5.438l5.485-5.462c.398-.351.797-.562 1.265-.562c1.055 0 1.899.82 1.899 1.875c0 .492-.211.89-.586 1.266l-5.414 5.484l5.39 5.414c.352.375.586.773.586 1.313c0 1.03-.843 1.898-1.875 1.898c-.539 0-.96-.258-1.312-.586l-5.438-5.414l-5.437 5.414c-.328.352-.797.586-1.29.586" />
-                        </svg>
-                    </div>
-                    <div class="tooltip fade icon" onclick="showWindow(5)" data-title="Ustaw Kolor Planszy">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16">
-                            <path fill="currentColor" fill-rule="evenodd"
-                                d="M11.773 7.412c-.064.064-.27.249-1.017-.027c-.75-.277-1.706-.928-2.695-1.918c-.99-.99-1.64-1.945-1.918-2.695c-.276-.747-.091-.953-.027-1.017c.064-.064.27-.249 1.017.027c.094.035.19.075.29.121c.7.324 1.54.93 2.405 1.797c.99.99 1.641 1.945 1.918 2.695c.276.747.091.953.027 1.017M7 6.528c.85.85 1.738 1.535 2.581 1.972H1.694v-.027a1.292 1.292 0 0 1 .1-.507l2.802-4.33c.056-.087.114-.174.172-.26C5.16 4.383 5.956 5.485 7 6.529Zm3.89-3.889c2.147 2.148 3.24 4.537 1.944 5.834a12.976 12.976 0 0 1-2.127 1.719L6.352 13.01s-1.945 1.296-4.537-1.296C-.778 9.12.518 7.175.518 7.175L3.336 2.82A12.98 12.98 0 0 1 5.056.694C6.351-.602 8.74.491 10.888 2.64Zm1.86 12.36c.966 0 1.75-.765 1.75-1.71c0-1.234-1.17-2.76-1.512-3.178a.304.304 0 0 0-.237-.111a.31.31 0 0 0-.24.112c-.34.422-1.511 1.96-1.511 3.178c0 .944.784 1.71 1.75 1.71Z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </div>
-                    <div class="tooltip fade icon" onclick="showWindow(7)" data-title="Wstaw Tekst">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M2 24v-4h20v4zm3.5-7l5.25-14h2.5l5.25 14h-2.4l-1.25-3.6H9.2L7.9 17zm4.4-5.6h4.2l-2.05-5.8h-.1z"/>
-                        </svg>
-                    </div>
-                    <div class="tooltip fade icon" onclick="showWindow(26)" data-title="Wstaw kształt">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="m2 11l5-9l5 9zm5 10q-1.65 0-2.825-1.175T3 17q0-1.65 1.175-2.825T7 13q1.65 0 2.825 1.175T11 17q0 1.65-1.175 2.825T7 21m6 0v-8h8v8zm1.4-10.5L13 9.1l2.6-2.6L13 3.9l1.4-1.4L17 5.1l2.6-2.6L21 3.9l-2.6 2.6L21 9.1l-1.4 1.4L17 7.9z"/>
-                        </svg>
-                    </div>
-                    <div class="tooltip fade icon" onclick="showWindow(8)" data-title="Rozmiar Pisaka i Gumki">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 56 56"><path fill="currentColor" fill-rule="evenodd" d="M42.84 16.12L16.12 42.84h5.526a2.08 2.08 0 1 1 0 4.16H11.248l-.074-.001a2.074 2.074 0 0 1-1.544-.608a2.071 2.071 0 0 1-.602-1.3A2.094 2.094 0 0 1 9 44.752V34.354a2.08 2.08 0 1 1 4.16 0v5.567l26.76-26.762h-5.566a2.08 2.08 0 1 1 0-4.159h10.398c.116 0 .229.01.34.028c.473.038.936.239 1.299.602c.425.424.627.987.608 1.544l.001.074v10.398a2.08 2.08 0 1 1-4.16 0z"/></svg>
-                    </div>
-                    <div class="tooltip fade icon" onclick="showWindow(10)" data-title="Zmień kolory obrazu">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21q-3.325 0-5.663-2.312T4 13.1q0-1.65.625-3.05t1.725-2.5L12 2l5.65 5.55q1.1 1.1 1.725 2.5T20 13.1q0 3.275-2.337 5.588T12 21m0-2V4.8L7.75 9q-.875.825-1.312 1.863T6 13.1q0 2.425 1.75 4.163T12 19"/></svg>
-                    </div>
-                    <div class="tooltip fade icon" onclick="showWindow(17)" data-title="Zmień wymiary obrazu">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 14L12 17L15 14M15 10L12 7L9 10" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </div>
-                    <div class="tooltip fade icon" onclick="removeBackground();" data-title="Usuń tło">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256"><path fill="currentColor" d="M252 152a12 12 0 0 1-12 12h-12v12a12 12 0 0 1-24 0v-12h-12a12 12 0 0 1 0-24h12v-12a12 12 0 0 1 24 0v12h12a12 12 0 0 1 12 12M56 76h12v12a12 12 0 0 0 24 0V76h12a12 12 0 1 0 0-24H92V40a12 12 0 0 0-24 0v12H56a12 12 0 0 0 0 24m128 112h-4v-4a12 12 0 0 0-24 0v4h-4a12 12 0 0 0 0 24h4v4a12 12 0 0 0 24 0v-4h4a12 12 0 0 0 0-24m38.14-105.17L82.82 222.14a20 20 0 0 1-28.28 0l-20.69-20.68a20 20 0 0 1 0-28.29L173.17 33.86a20 20 0 0 1 28.28 0l20.69 20.68a20 20 0 0 1 0 28.29M159 112l-15-15l-90.35 90.31l15 15Zm43.31-43.31l-15-15L161 80l15 15Z"/></svg>
-                    </div>
-                </div>
-                <div id="container">
-                    <canvas id="niepaintCanvas" width="1400" height="1100"></canvas>
                 </div>
             </div>
         </div>
-    </div>
 
 
-    <div class="notification" id="rbContainer">
-        <div class="notificationContainer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                <path fill="currentColor"
-                    d="M12 17q.425 0 .713-.288T13 16v-4q0-.425-.288-.712T12 11q-.425 0-.712.288T11 12v4q0 .425.288.713T12 17m0-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22" />
-            </svg>
+    <div class="notification" id="rbContainer" >
+        <div class="notificationContainer" style="background-color: #242424;">
+            <div id="svgContainer">
+
+            </div>
+
             <div style="margin-left: 10px;" id="notifvalue">
                 
             </div>
         </div>
     </div>
 
-    <div class="windowContainer" id="windowContainer">
+    <div class="windowContainer" id="windowContainer1" style="display: none;">
         <div class="containerContent">
             <div class="containerHeader">
                 <div style="display: flex; justify-items: center;">
@@ -166,7 +173,7 @@
                     </svg>
                     Ustaw Kolor
                 </div>
-                <div class="close" onclick="hideWindow()">
+                <div class="close" onclick="hideWindow(1)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                         <path fill="currentColor"
                             d="m12 12.708l3.246 3.246q.14.14.344.15q.204.01.364-.15t.16-.354q0-.194-.16-.354L12.708 12l3.246-3.246q.14-.14.15-.344q.01-.204-.15-.364t-.354-.16q-.194 0-.354.16L12 11.292L8.754 8.046q-.14-.14-.344-.15q-.204-.01-.364.15t-.16.354q0 .194.16.354L11.292 12l-3.246 3.246q-.14.14-.15.344q-.01.204.15.364t.354.16q.194 0 .354-.16zM12.003 21q-1.866 0-3.51-.708q-1.643-.709-2.859-1.924q-1.216-1.214-1.925-2.856Q3 13.87 3 12.003q0-1.866.708-3.51q.709-1.643 1.924-2.859q1.214-1.216 2.856-1.925Q10.13 3 11.997 3q1.866 0 3.51.708q1.643.709 2.859 1.924q1.216 1.214 1.925 2.856Q21 10.13 21 11.997q0 1.866-.708 3.51q-.709 1.643-1.924 2.859q-1.214 1.216-2.856 1.925Q13.87 21 12.003 21" />
@@ -202,8 +209,8 @@
                 </div>
             </div>
             <div style="margin-left: 10px;">
-                <p>gasnic [bez strony]</p>
-                <p>CrystalX <a href="https://crystalx.pl">[crystalx.pl]</a></p>
+                <p>gasnic</p>
+                <p>CrystalX</a>
                 
                 
                 
@@ -212,6 +219,39 @@
         </div>
     </div>
 
+    <div class="windowContainer" id="windowContainer28" style="display: none;">
+        <div class="containerContent">
+            <div class="containerHeader">
+                <div style="display: flex; justify-items: center;">
+                    <svg style="margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M16 6a4 4 0 1 1-8 0a4 4 0 0 1 8 0m-.322 7.503c-.473.005-.914.023-1.298.074c-.643.087-1.347.293-1.928.875c-.582.581-.788 1.285-.874 1.928c-.078.578-.078 1.284-.078 2.034v.172c0 .75 0 1.456.178 2.034c.06.451.18.932.447 1.38H12c-8 0-8-2.015-8-4.5S7.582 13 12 13c1.326 0 2.577.181 3.678.503" />
+                        <path fill="currentColor" fill-rule="evenodd"
+                            d="M16.5 22c-1.65 0-2.475 0-2.987-.513C13 20.975 13 20.15 13 18.5c0-1.65 0-2.475.513-2.987C14.025 15 14.85 15 16.5 15c1.65 0 2.475 0 2.987.513C20 16.125 20 16.85 20 18.5c0 1.65 0 2.475-.513 2.987C18.975 22 18.15 22 16.5 22m1.968-4.254a.583.583 0 1 0-.825-.825l-1.92 1.92l-.366-.365a.583.583 0 1 0-.825.825l.778.778a.583.583 0 0 0 .825 0z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Wstaw gradient
+                </div>
+                <div class="close" onclick="hideWindow(28)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="m12 12.708l3.246 3.246q.14.14.344.15q.204.01.364-.15t.16-.354q0-.194-.16-.354L12.708 12l3.246-3.246q.14-.14.15-.344q.01-.204-.15-.364t-.354-.16q-.194 0-.354.16L12 11.292L8.754 8.046q-.14-.14-.344-.15q-.204-.01-.364.15t-.16.354q0 .194.16.354L11.292 12l-3.246 3.246q-.14.14-.15.344q-.01.204.15.364t.354.16q.194 0 .354-.16zM12.003 21q-1.866 0-3.51-.708q-1.643-.709-2.859-1.924q-1.216-1.214-1.925-2.856Q3 13.87 3 12.003q0-1.866.708-3.51q.709-1.643 1.924-2.859q1.214-1.216 2.856-1.925Q10.13 3 11.997 3q1.866 0 3.51.708q1.643.709 2.859 1.924q1.216 1.214 1.925 2.856Q21 10.13 21 11.997q0 1.866-.708 3.51q-.709 1.643-1.924 2.859q-1.214 1.216-2.856 1.925Q13.87 21 12.003 21" />
+                    </svg>
+                </div>
+            </div>
+            <div style="margin-left: 10px;">
+                    <h1>Wybierz kolory</h1>
+                    <label for="kolor 1">Kolor 1: </label><input type="color" name="" id="kolor1">
+                    <label for="kolor 1">Kolor 2: </label><input type="color" name="" id="kolor2"><br>
+                    <center><button type="button" onclick="rysujGradient(); hideWindow(28);" margin: 5px;>Stwórz gradient!</button></center>
+                
+                
+                
+                
+            </div>
+        </div>
+    </div>
     <div class="windowContainer" id="windowContainer9" style="max-width: 50vw; max-height: 20vh;">
         <div class="containerContent">
             <div class="containerHeader">
@@ -226,123 +266,101 @@
                     </svg>
                 </div>
             </div>
-            <div style="margin-left: 10px;" class="dupnydiv">
-                <div id="bum">
-                    <hr> 
-                    <div id="aktunag">ColorBJ 10.0</div>
-                    <hr>
-                    <div id="aktu">- Dodano funkcję dodawania kształtów na canvas (edytuj shapelist.js)</div>
-                    <div id="aktu">- Poprawiono rysowanie po canvasie</div>
-                    <div id="aktu">- Dodano poprawianie kresek rysowania</div>
-                    <div id="aktu">- <b>MOBILE</b> Ulepszono responsywność wersji mobilnej</div>
-                    <div id="aktu">- <b>MOBILE</b> Zmieniono system navbara w wersji mobilnej</div>
-                    <div id="aktu">- <b>MOBILE</b> Wersja mobilna ColorBJ dostaje oficjalne wsparcie</div>
-                    <div id="aktu">- <u>DESKTOP:</u> Zmiana systemu powiadomień o aktualizacji w wersji desktopowej</div>
-                    
-                 </div>
-                <div id="bum">
-                    <hr> 
-                    <div id="aktunag">ColorBJ 8.0</div>
-                    <hr>
-                    <div id="aktu">- Dodano funkcję drukowania obrazów (ctrl + p też działa)</div>
-                    <div id="aktu">- Zmieniono ikonę <i>Zmień kolory obrazu</i></div>
-                    <div id="aktu">- <u>DESKTOP:</u> Dodano Discord RPC (jeżeli nie działa ustaw prywatność aktywności w ustawieniach discorda)</div>
-                    <div id="aktu">- <u>DESKTOP:</u> Dodano SplashScreen</div>
-                    
-                 </div>
-                <div id="bum">
-                <hr>
-                <div id="aktunag">ColorBJ 7.0</div>
-                <hr>
-                <div id="aktu">- Dodano możliwość zgłaszania błędów / pomysłów / opinii</div>
-                <div id="aktu">- Dodano menu główne, które pokazuje się na starcie aplikacji</div>
-                <div id="aktu">- Dodano funkcję wklejania obrazów ze schowka</div>
-                <div id="aktu">- Dodano funkcję kopiowania obrazów do schowka</div>
-                <div id="aktu">- Poprawiono ekran ładowania</div>
-                
-             </div>
-            <div id="bum">
-                <hr>
-                <div id="aktunag">ColorBJ 6.2</div>
-                <hr>
-                <div id="aktu">- Poprawiono działanie <b>,,Co nowego"</b></div>
-                <div id="aktu">- Zoptymalizowano działanie UI</div>
-            </div>
-            <div id="bum">
-                <hr>
-                <div id="aktunag">ColorBJ 6.1</div>
-                <hr>
-                <div id="aktu">- Zmieniono kolejność w <b>,,Co nowego"</b> z od najstarszego do najnowszego do od najnowszego do najstarszego</div>
-            </div>
-            <div id="bum">
-                    <hr>    
-                    <div id="aktunag">ColorBJ 6.0</div>
-                    <hr>
-                    <div id="aktu">- Dodano możliwość usuwania tła ze zdjęć </div>
-                    <div id="aktu">- Wznowiono funkcję powiadomień </div>
-                    <div id="aktu">- Dodano ekran ładowania</div>
-                    <div id="aktu">- Po załadowaniu zdjęcia pole robocze jest automatycznie skalowane do jego rozdzielczości</div>
-                    <div id="aktu">- Dodano brakującą wersję 1.0 w changelogu</div>
-                    <div id="aktu">- Optymalizacje backendu</div>
-                    <div id="aktu">- Zmiana systemu renderowania powiadomień</div>
-                </div>
-                <div id="bum">
-                    <hr>
-                    <div id="aktunag">ColorBJ 5.0</div>
-                    <hr>
-                    <div id="aktu">- Można ustawić pozycję tekstu myszką.</div>
-                    <div id="aktu">- Ulepszono działanie navbara, po kliknięciu na plik albo informacje opcje, które są niżej się cały czas pokazują.</div>
-                    <div id="aktu">- Dodano możliwość resizowania obrazu</div>
-                    <div id="aktu">- Poprawiono błąd, po którym jak się zmieni kolor planszy to nie można pisać pisakiem.</div>  
-                </div>
-                <div id="bum">
-                    <hr>
-                    <div id="aktunag">ColorBJ 4.0</div>
-                    <hr>
-                    <div id="aktu">- Dodano funkcję drag&drop</div>
-                </div>
-                <div id="bum">
-                    <hr>
-                    <div id="aktunag">ColorBJ 3.1</div>
-                    <hr>
-                    <div id="aktu">- Naprawa błędu z kolorem</div>
-                    <div id="aktu">- Optymalizacje programu</div>
-                </div>
-                <div id="bum">
-                    <hr> 
-                    <div id="aktunag">ColorBJ 3.0</div>
-                    <hr>
-                    <div id="aktu">- Dodano możliwość manipulacji kolorami</div>
-                    <div id="aktu">- Dodano możliwość stworzenia nowego projektu na pasku <b>Plik</b></div>
-                </div>
-                <div id="bum">
-                    <hr> 
-                    <div id="aktunag">ColorBJ 2.2</div>
-                    <hr>
-                    <div id="aktu">- Poprawiono responsywność.</div>
-                    <div id="aktu">- DESKTOP: Dodano system automatycznej aktualizacji.</div>
-                </div>
-                <div id="bum">
-                    <hr> 
-                    <div id="aktunag">ColorBJ 2.1</div>
-                    <hr>
-                    <div id="aktu">- Poprawiono wersję webową.</div>
-                    <div id="aktu">- Dodano zakładkę ,,Co Nowego?".</div>
-                </div>
-                <div id="bum">
-                    <hr> 
-                    <div id="aktunag">ColorBJ 2.0</div>
-                    <hr>
-                    <div id="aktu">- Możliwość zmiany rozmiaru pędzla i gumki.</div>
-                    <div id="aktu">- Zoptymalizowano kod.</div>
-                </div>
-                <div id="bum"> 
-                    <hr> 
-                    <div id="aktunag">ColorBJ 1.0 (niepaint) </div>
-                    <hr>
-                    <div id="aktu">- Zmieniono system renderowania pola roboczego</div>
-                    <div id="aktu">- Dodano możliwość otwierania obrazów</div>
-                </div>
+            <div style="margin-left: 10px;" class="dupnydiv" id="dupnydiv">
+                ## ColorBJ 11.0
+                ---
+                - Dodano gradienty
+                - Poprawiono błąd uniemożliwiający zmianę koloru pędzla
+                - Dodano możliwość wyłączenia automatycznego poprawiania linii
+                - Dodano ustawienia
+                - Dodano skrypty (pisane w czystym javascripcie)
+                - **Co nowego** od teraz jest zapisywane w formacie markdown (.md)
+                - Dodano kursor, który jest widoczny tylko na canvasie i automatycznie zmienia swój rozmiar i kolor
+
+                ## ColorBJ 10.0
+                ---
+                - Dodano funkcję dodawania kształtów na canvas (edytuj shapelist.js)
+                - Poprawiono rysowanie po canvasie
+                - Dodano poprawianie kresek rysowania
+                - **MOBILE** Ulepszono responsywność wersji mobilnej
+                - **MOBILE** Zmieniono system navbara w wersji mobilnej
+                - **MOBILE** Wersja mobilna ColorBJ dostaje oficjalne wsparcie
+                - **DESKTOP:** Zmiana systemu powiadomień o aktualizacji w wersji desktopowej
+
+                ## ColorBJ 8.0
+                ---
+                - Dodano funkcję drukowania obrazów (ctrl + p też działa)
+                - Zmieniono ikonę _Zmień kolory obrazu_
+                - **DESKTOP:** Dodano Discord RPC (jeżeli nie działa ustaw prywatność aktywności w ustawieniach discorda)
+                - **DESKTOP:** Dodano SplashScreen
+
+                ## ColorBJ 7.0
+                ---
+                - Dodano możliwość zgłaszania błędów / pomysłów / opinii
+                - Dodano menu główne, które pokazuje się na starcie aplikacji
+                - Dodano funkcję wklejania obrazów ze schowka
+                - Dodano funkcję kopiowania obrazów do schowka
+                - Poprawiono ekran ładowania
+
+                ## ColorBJ 6.2
+                ---
+                - Poprawiono działanie **,,Co nowego"**
+                - Zoptymalizowano działanie UI
+
+                ## ColorBJ 6.1
+                ---
+                - Zmieniono kolejność w **,,Co nowego"** z od najstarszego do najnowszego do od najnowszego do najstarszego
+
+                ## ColorBJ 6.0
+                ---
+                - Dodano możliwość usuwania tła ze zdjęć
+                - Wznowiono funkcję powiadomień
+                - Dodano ekran ładowania
+                - Po załadowaniu zdjęcia pole robocze jest automatycznie skalowane do jego rozdzielczości
+                - Dodano brakującą wersję 1.0 w changelogu
+                - Optymalizacje backendu
+                - Zmiana systemu renderowania powiadomień
+
+                ## ColorBJ 5.0
+                ---
+                - Można ustawić pozycję tekstu myszką
+                - Ulepszono działanie navbara, po kliknięciu na plik albo informacje opcje, które są niżej się cały czas pokazują
+                - Dodano możliwość resizowania obrazu
+                - Poprawiono błąd, po którym jak się zmieni kolor planszy to nie można pisać pisakiem
+
+                ## ColorBJ 4.0
+                ---
+                - Dodano funkcję drag&drop
+
+                ## ColorBJ 3.1
+                ---
+                - Naprawa błędu z kolorem
+                - Optymalizacje programu
+
+                ## ColorBJ 3.0
+                ---
+                - Dodano możliwość manipulacji kolorami
+                - Dodano możliwość stworzenia nowego projektu na pasku **Plik**
+
+                ## ColorBJ 2.2
+                ---
+                - Poprawiono responsywność
+                - **DESKTOP:** Dodano system automatycznej aktualizacji
+
+                ## ColorBJ 2.1
+                ---
+                - Poprawiono wersję webową
+                - Dodano zakładkę **,,Co Nowego?"**
+
+                ## ColorBJ 2.0
+                ---
+                - Możliwość zmiany rozmiaru pędzla i gumki
+                - Zoptymalizowano kod
+
+                ## ColorBJ 1.0 (niepaint)
+                ---
+                - Zmieniono system renderowania pola roboczego
+                - Dodano możliwość otwierania obrazów
 
             </div>
         </div>
@@ -508,6 +526,30 @@
             </div>
         </div>
     </div>
+    <div class="windowContainer" id="windowContainer29" style="display: none;">
+        <div class="containerContent">
+            <div class="containerHeader">
+                <div style="display: flex; justify-items: center;">
+                    <svg style="margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 16 16">
+                        <path fill="currentColor" fill-rule="evenodd"
+                            d="M11.773 7.412c-.064.064-.27.249-1.017-.027c-.75-.277-1.706-.928-2.695-1.918c-.99-.99-1.64-1.945-1.918-2.695c-.276-.747-.091-.953-.027-1.017c.064-.064.27-.249 1.017.027c.094.035.19.075.29.121c.7.324 1.54.93 2.405 1.797c.99.99 1.641 1.945 1.918 2.695c.276.747.091.953.027 1.017M7 6.528c.85.85 1.738 1.535 2.581 1.972H1.694v-.027a1.292 1.292 0 0 1 .1-.507l2.802-4.33c.056-.087.114-.174.172-.26C5.16 4.383 5.956 5.485 7 6.529Zm3.89-3.889c2.147 2.148 3.24 4.537 1.944 5.834a12.976 12.976 0 0 1-2.127 1.719L6.352 13.01s-1.945 1.296-4.537-1.296C-.778 9.12.518 7.175.518 7.175L3.336 2.82A12.98 12.98 0 0 1 5.056.694C6.351-.602 8.74.491 10.888 2.64Zm1.86 12.36c.966 0 1.75-.765 1.75-1.71c0-1.234-1.17-2.76-1.512-3.178a.304.304 0 0 0-.237-.111a.31.31 0 0 0-.24.112c-.34.422-1.511 1.96-1.511 3.178c0 .944.784 1.71 1.75 1.71Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Wstaw skrypt
+                </div>
+                <div class="close" onclick="hideWindow(29)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="m12 12.708l3.246 3.246q.14.14.344.15q.204.01.364-.15t.16-.354q0-.194-.16-.354L12.708 12l3.246-3.246q.14-.14.15-.344q.01-.204-.15-.364t-.354-.16q-.194 0-.354.16L12 11.292L8.754 8.046q-.14-.14-.344-.15q-.204-.01-.364.15t-.16.354q0 .194.16.354L11.292 12l-3.246 3.246q-.14.14-.15.344q-.01.204.15.364t.354.16q.194 0 .354-.16zM12.003 21q-1.866 0-3.51-.708q-1.643-.709-2.859-1.924q-1.216-1.214-1.925-2.856Q3 13.87 3 12.003q0-1.866.708-3.51q.709-1.643 1.924-2.859q1.214-1.216 2.856-1.925Q10.13 3 11.997 3q1.866 0 3.51.708q1.643.709 2.859 1.924q1.216 1.214 1.925 2.856Q21 10.13 21 11.997q0 1.866-.708 3.51q-.709 1.643-1.924 2.859q-1.214 1.216-2.856 1.925Q13.87 21 12.003 21" />
+                    </svg>
+                </div>
+            </div>
+            <div>
+                <input type="file" name="" id="fileInput" onchange="loadScript(); hideWindow(29)">
+            </div>
+        </div>
+    </div>
 
     <div class="windowContainer" id="windowContainer6">
         <div class="containerContent">
@@ -636,6 +678,29 @@
                     <label for="szerokosc: ">Szerokość: </label><input type="text" placeholder="512" id="szerokoscinput" style="margin: 15px;"><br>
                     <center><button onclick="customCanvasSize(); hideWindow(17)">Zmień wymiary</button></center>
                 
+                    
+       
+
+
+            </div>
+        </div>
+    </div>
+    <div class="windowContainer" id="windowContainer27" style="display: none;">
+        <div class="containerContent">
+            <div class="containerHeader">
+                <div style="display: flex; justify-items: center;">
+                    <svg style="margin-right: 10px;" xmlns="http://www.w3.org/2000/svg" width="24" height=  "24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22"/></svg>
+                    Ustawienia
+                </div>
+                <div class="close" onclick="hideWindow(27)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="m12 12.708l3.246 3.246q.14.14.344.15q.204.01.364-.15t.16-.354q0-.194-.16-.354L12.708 12l3.246-3.246q.14-.14.15-.344q.01-.204-.15-.364t-.354-.16q-.194 0-.354.16L12 11.292L8.754 8.046q-.14-.14-.344-.15q-.204-.01-.364.15t-.16.354q0 .194.16.354L11.292 12l-3.246 3.246q-.14.14-.15.344q-.01.204.15.364t.354.16q.194 0 .354-.16zM12.003 21q-1.866 0-3.51-.708q-1.643-.709-2.859-1.924q-1.216-1.214-1.925-2.856Q3 13.87 3 12.003q0-1.866.708-3.51q.709-1.643 1.924-2.859q1.214-1.216 2.856-1.925Q10.13 3 11.997 3q1.866 0 3.51.708q1.643.709 2.859 1.924q1.216 1.214 1.925 2.856Q21 10.13 21 11.997q0 1.866-.708 3.51q-.709 1.643-1.924 2.859q-1.214 1.216-2.856 1.925Q13.87 21 12.003 21" />
+                    </svg>
+                </div>
+            </div>
+            <div style="margin-left: 10px;" id="wymiarydupa">
+                    <label for="Poprawianie linii">Poprawianie linii: </label><input type="checkbox" name="poprawianielinii" id="liniepoprawianedupnie" onchange="togglePoprawianieLinii();">
                     
        
 
@@ -793,6 +858,8 @@
                         <a onclick="showWindow(3); hideWindow(25);">Zapisz Obraz</a><br>
                         <a onclick="showWindow(6); hideWindow(25);">Otwórz Obraz</a><br>
                         <a onclick="showWindow(11); hideWindow(25);">Nowy plik</a><br>
+                        <a onclick="showWindow(27)">Ustawienia</a>
+                        <a onclick="showWindow(29)">Załaduj skrypt</a>
                         <a onclick="printCanvas(); hideWindow(25);">Drukuj</a><br>
                         <hr>
                         <h3>Informacje</h3>

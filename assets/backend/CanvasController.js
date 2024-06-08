@@ -14,22 +14,55 @@ var pastePosX;
 var offscreenCanvas = document.createElement('canvas');
 var offscreenCtx = offscreenCanvas.getContext('2d');
 var points = [];
+var ulepszanieLinii = false;
+var disabled = false;
+
+function togglePoprawianieLinii() {
+    var walucja = document.getElementById("liniepoprawianedupnie").checked;
+    console.log("" + walucja);
+    ulepszanieLinii = walucja;
+    Notification("Ustawiono poprawianie linii");
+}
 
 function setCanvasSize() {
     offscreenCanvas.width = canvas.width;
     offscreenCanvas.height = canvas.height;
     offscreenCtx.drawImage(canvas, 0, 0);
-    
-    canvasWidth = window.innerWidth < 768 ? window.innerWidth - 70 : 1200;
-    canvasHeight = window.innerWidth < 768 ? 600 : 800;
+
+  
+    var canvasWidth = window.innerWidth < 768 ? window.innerWidth - 70 : 1200;
+    var canvasHeight = window.innerHeight < 768 ? window.innerHeight - 100 : 800;
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
+
+   
     ctx.fillStyle = currentBackgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
     ctx.drawImage(offscreenCanvas, 0, 0, offscreenCanvas.width, offscreenCanvas.height, 0, 0, canvas.width, canvas.height);
 }
+function updateCursor() {
+    const kanwasik = document.getElementById("niepaintCanvas");
+    
+    if(disabled){
+        kanwasik.style.cursor = "cross";
+        return;
+    }else{
+        const cursorCanvas = document.createElement('canvas');
+        cursorCanvas.width = blockSize * 2;
+        cursorCanvas.height = blockSize * 2;
+        const cursorCtx = cursorCanvas.getContext('2d');
+    
+        cursorCtx.beginPath();
+        cursorCtx.arc(blockSize, blockSize, blockSize, 0, Math.PI * 2);
+        cursorCtx.fillStyle = kolor;
+        cursorCtx.fill();
+    
+        const dataURL = cursorCanvas.toDataURL();
+        canvas.style.cursor = `url(${dataURL}) ${blockSize} ${blockSize}, auto`;
+    }
 
+}   
 function customCanvasSize() {
     offscreenCanvas.width = canvas.width;
     offscreenCanvas.height = canvas.height;
@@ -60,6 +93,7 @@ function customSize2(w, h) {
 
 function setBlockSize(size) {
     blockSize = size;
+    updateCursor();
 }
 
 document.getElementById("wyb").addEventListener('change', function() {
@@ -83,46 +117,64 @@ function setupCanvas() {
     canvas.addEventListener('touchstart', startPainting, { passive: false });
     canvas.addEventListener('touchmove', touchPaint, { passive: false });
     canvas.addEventListener('touchend', stopPainting, { passive: false });
+    updateCursor();
 }
 
 function ustawkolor(color) {
     kolor = color == '#000000' ? '#5e5e5e' : color;
     painting = false;
+    updateCursor();
 }
 
 function startPainting(event) {
-    painting = true;
-    [lastX, lastY] = getMousePos(event);
-    paint(event);
-}
-function stopPainting() {
-    if (!painting) return;
-    painting = false;
-
-    if (points.length > 1) {
-        const simplifiedPoints = simplifyLine(points, 2);
-
-        offscreenCanvas.width = canvas.width;
-        offscreenCanvas.height = canvas.height;
-        offscreenCtx.drawImage(canvas, 0, 0);
-
-
-        ctx.strokeStyle = rubberMode ? currentBackgroundColor : kolor;
-        ctx.lineWidth = blockSize;
-        ctx.lineCap = 'round';
-
-        ctx.beginPath();
-        ctx.moveTo(simplifiedPoints[0][0], simplifiedPoints[0][1]);
-        for (let i = 1; i < simplifiedPoints.length; i++) {
-            ctx.lineTo(simplifiedPoints[i][0], simplifiedPoints[i][1]);
-        }
-        ctx.stroke();
-
+    if(disabled){
+        document.style.cursor = "cross";
         
-        offscreenCtx.drawImage(canvas, 0, 0);
+    }else{
+        painting = true;
+        [lastX, lastY] = getMousePos(event);
+        paint(event);
     }
 
-    points = [];
+    
+}
+function stopPainting() {
+    
+    if(ulepszanieLinii)
+        {
+        if (!painting) return;
+        painting = false;
+    
+        if (points.length > 1) {
+            const simplifiedPoints = simplifyLine(points, 2);
+    
+            offscreenCanvas.width = canvas.width;
+            offscreenCanvas.height = canvas.height;
+            offscreenCtx.drawImage(canvas, 0, 0);
+    
+    
+            ctx.strokeStyle = rubberMode ? currentBackgroundColor : kolor;
+            ctx.lineWidth = blockSize;
+            ctx.lineCap = 'round';
+    
+            ctx.beginPath();
+            ctx.moveTo(simplifiedPoints[0][0], simplifiedPoints[0][1]);
+            for (let i = 1; i < simplifiedPoints.length; i++) {
+                ctx.lineTo(simplifiedPoints[i][0], simplifiedPoints[i][1]);
+            }
+            ctx.stroke();
+    
+            
+            offscreenCtx.drawImage(canvas, 0, 0);
+        }
+    
+        points = [];
+    }
+    else
+    {
+        painting = false;
+    }
+    updateCursor();
 }
 
 
@@ -130,19 +182,44 @@ function stopPainting() {
 
 
 function paint(event) {
-    if (!painting) return;
+    if(disabled){
+        return;
+    }
+    else{
+        if (!painting) return;
+        if(ulepszanieLinii){
+            var [x, y] = getMousePos(event);
+            points.push([x, y]);
+        
+            ctx.strokeStyle = rubberMode ? currentBackgroundColor : kolor;
+            ctx.lineWidth = blockSize;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            [lastX, lastY] = [x, y];
+        }
+        else {
+            
+    
+            var [x, y] = getMousePos(event);
+        
+            ctx.strokeStyle = rubberMode ? currentBackgroundColor : kolor;
+            ctx.lineWidth = blockSize;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            [lastX, lastY] = [x, y];
+        }
+    }
 
-    var [x, y] = getMousePos(event);
-    points.push([x, y]);
+    
 
-    ctx.strokeStyle = rubberMode ? currentBackgroundColor : kolor;
-    ctx.lineWidth = blockSize;
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    [lastX, lastY] = [x, y];
+
+
 }
 
 
@@ -179,14 +256,14 @@ function fillSzachownica() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     document.getElementById('windowContainer5').style.display = 'none';
     ustawkolor('#5e5e5e');
-    Notification("Wypełniono pole robocze nowym kolorem.");
+    Notification("Wypełniono pole robocze nowym kolorem.", "success");
 }
 
 function clearSzachownica() {
     ctx.fillStyle = currentBackgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     document.getElementById('windowContainer4').style.display = 'none';
-    Notification("Wyczyszczono pole robocze.");
+    Notification("Wyczyszczono pole robocze.", "success");
 }
 
 function saveImage() {
@@ -195,7 +272,7 @@ function saveImage() {
     link.download = filename;
     link.href = canvas.toDataURL();
     link.click();
-    Notification("Zapisano obraz.");
+    Notification("Zapisano obraz.", "success");
 }
 
 function openImage(event) {
@@ -318,7 +395,8 @@ function startShapePosSelecting(){
 
 document.getElementById('niepaintCanvas').onclick = function(e) {
     if (posListening) {
-        stopPainting();
+        disabled = true;
+        updateCursor();
         var rect = e.target.getBoundingClientRect();
         var x = e.clientX - rect.left;
         var y = e.clientY - rect.top;
@@ -327,11 +405,12 @@ document.getElementById('niepaintCanvas').onclick = function(e) {
         posListening = false;
         const container = document.getElementById('windowContainer7');
         container.style.display = 'block';
-        startPainting();
-        
+        disabled = false;
+        updateCursor();
     }
     if (pastePosListening) {
-        stopPainting();
+        disabled = true;
+        updateCursor();
         const container = document.getElementById('windowContainer20');
         var rect = e.target.getBoundingClientRect();
         var x = e.clientX - rect.left;
@@ -340,11 +419,12 @@ document.getElementById('niepaintCanvas').onclick = function(e) {
         document.getElementById("posyy").value = y;
         pastePosListening = false;
         container.style.display = 'block';
-        startPainting();
-        
+        disabled = false;
+        updateCursor();
     }
     if (shapePosListening) {
-        stopPainting();
+        disabled = true;
+        updateCursor();
         const container = document.getElementById('windowContainer26');
         var rect = e.target.getBoundingClientRect();
         var x = e.clientX - rect.left;
@@ -353,8 +433,8 @@ document.getElementById('niepaintCanvas').onclick = function(e) {
         document.getElementById("yyy").value = y;
         shapePosListening = false;
         container.style.display = 'block';
-        startPainting();
-        
+        disabled = false;
+        updateCursor();
     }
 }
 
@@ -420,7 +500,7 @@ async function sendOpinion(){
         let url = `http://site30133.web1.titanaxe.com/addopinion.php?opinia=${content}&email=${email}`;
         console.log(url);
         await fetch(url, { method: 'GET' });
-        Notification("Wysłano opinię.");
+        Notification("Wysłano opinię.", "success");
     } catch (error) {
         const container = document.getElementById('windowContainer18');
         container.style.display = 'block';
@@ -484,7 +564,8 @@ document.addEventListener('DOMContentLoaded', () => {
             navigator.clipboard.write([item]).then(() => {
                 Notification("Skopiowano zawartość canvasa do schowka.");
             }).catch(err => {
-                sendError("Nie udało się skopiować canvasa do schowka<br>Błąd: "+err);
+                sendError("Nie udało się skopiować canvasa do schowka<br>Błąd: "+err, );
+                Notification("Wystąpił błąd, sprawdź konsolę javascript.", "error");
             });
         });
     }
@@ -514,7 +595,7 @@ function printCanvas() {
 
     var windowContent = '<!DOCTYPE html>';
     windowContent += '<html>';
-    windowContent += '<head><title>Print Canvas</title></head>';
+    windowContent += '<head><title>ColorBJ - drukowanie</title></head>';
     windowContent += '<body>';
     windowContent += '<img src="' + dataUrl + '">';
     windowContent += '</body>';
@@ -570,7 +651,21 @@ function createButtons() {
 }
 createButtons();
 
+function rysujGradient() {
+    var c = document.getElementById("niepaintCanvas");
+    var ctx = c.getContext("2d");
+    var kolor1 = document.getElementById("kolor1").value;
+    var kolor2 = document.getElementById("kolor2").value;
 
+    
+    var grd = ctx.createLinearGradient(0, 0, c.width, 0); 
+    grd.addColorStop(0, kolor1);
+    grd.addColorStop(1, kolor2);
+
+    
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, c.width, c.height);
+}
 
 
 window.onload = function() {

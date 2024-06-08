@@ -1,10 +1,13 @@
 {
   "name": "colorbj",
-  "version": "10.0",
+  "version": "11.0",
   "description": "ColorBJ",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "linux": "electron-packager . ColorBJ-$(node -p \"require('./package.json').version\") --platform=linux --arch=x64 --icon=niepaint.png",
+    "windows": "electron-packager . ColorBJ-$(node -p \"require('./package.json').version\") --platform=win32 --arch=x64 --icon=niepaint.ico",
+    "all": "npm run linux && npm run windows"
   },
   "author": "crystalx, gasnic",
   "license": "ISC",
