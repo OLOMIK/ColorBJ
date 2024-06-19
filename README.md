@@ -41,3 +41,4 @@ The online (web) version can be found [here](https://crystalx.pl/colorbj/).
 
 ## NOTE
 If you would like to make any changes, please send a pull request.
+we use API from stability.ai for background removal
