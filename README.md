@@ -41,4 +41,4 @@ The online (web) version can be found [here](https://crystalx.pl/colorbj/).
 
 ## NOTE
 If you would like to make any changes, please send a pull request.
-we use API from stability.ai for background removal
+We use API from stability.ai for background removal. If you want to use own API edit CanvasController.js.
