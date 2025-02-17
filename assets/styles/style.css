@@ -103,6 +103,7 @@ input, button:hover {
     background-color: #111111;
     padding: 10px;
     border-radius: 10px;
+
 }
 
 .nav {
@@ -302,7 +303,7 @@ nav ul li ul li a:hover {
     margin-left: auto;
 }
 
-.close:hover {
+close:hover {
     cursor: pointer;
 }
 
@@ -555,4 +556,43 @@ nav ul li ul li a:hover {
 }
 .panelsrodkowy button{
     margin: 5px;
+}
+
+.layers-panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 200px;
+    height: 80vh;
+    max-height: 100vh;
+    background-color: #111111;
+    color: #fff;
+    padding: 0.6%;
+    border-radius: 10px;
+    display: none;
+    overflow-y: auto;
+    margin-right: 3vw;
+    margin-top: 2vw;
+
+}
+
+.layers-panel button {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#toggleLayersPanel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #1e1e2e;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+.layer-item{
+    padding: 3px;
+    border-radius: 5px;
+    cursor: pointer;
 }
