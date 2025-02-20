@@ -24,6 +24,8 @@
 - Removing background
 - Text editing
 - Color manipulating
+- Picture generator (text-to-image)
+- Layer system
 
 ## Technologies:
 - Electron.js (for the desktop version)
@@ -31,6 +33,8 @@
 - JavaScript
 - HTML
 - CSS
+- PHP (for BJ+)
+- TailwindCSS (for BJ+)
 
 ## Authors:
 - [@gasnicowydivolper](https://github.com/OLOMIK)
