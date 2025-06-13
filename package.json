@@ -1,23 +1,52 @@
 {
   "name": "colorbj",
-  "version": "11.0",
+  "version": "14.0.0",
   "description": "ColorBJ",
   "main": "index.js",
   "scripts": {
-    "start": "electron .",
+    "dev": "electron .",
     "linux": "electron-packager . ColorBJ-$(node -p \"require('./package.json').version\") --platform=linux --arch=x64 --icon=niepaint.png",
     "windows": "electron-packager . ColorBJ-$(node -p \"require('./package.json').version\") --platform=win32 --arch=x64 --icon=niepaint.ico",
-    "all": "npm run linux && npm run windows"
+    "all": "npm run linux && npm run windows",
+    "build": "electron-builder --dir",
+    "dist": "electron-builder --mac --win --linux"
+
   },
   "author": "crystalx, gasnic",
   "license": "ISC",
   "dependencies": {
     "@trodi/electron-splashscreen": "^1.0.2",
     "discord-rpc": "^4.0.1",
-    "electron": "^29.4.1",
     "fs": "^0.0.1-security"
   },
   "devDependencies": {
+    "electron": "^29.4.1",
+    "electron-builder": "^26.0.12",
     "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.olomowostudio.colorbj",
+    "productName": "ColorBJ",
+    "files": [
+      "**/*"
+    ],
+    "mac": {
+      "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "icon": "ColorBJ.icns",
+      "target": "dmg"
+    },
+    "dmg": {
+      "sign": false
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "niepaint.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "niepaint.png"
+    }
   }
 }

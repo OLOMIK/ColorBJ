@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Notification, shell } = require('electron');
 const https = require('https');
-const url = 'https://crystalx.pl/colorbj/lts-version.txt';
+const url = 'https://olomowostudio.pl/wersja.txt'; 
 const DiscordRPC = require('discord-rpc');
 const clientId = '1245328919071297679';
 const packageJson = require('./package.json');
@@ -59,11 +59,8 @@ const createWindow = () => {
   mainWindow.loadFile('index.html');
   
   mainWindow.webContents.on('will-navigate', (event, url) => {
-    if (url.startsWith('https://discord.com')) {
-      event.preventDefault();
-      shell.openExternal('https://discord.gg/hveD8v9gk2');
-      mainWindow.loadFile('index.html');
-    }
+    event.preventDefault(); 
+    shell.openExternal(url); 
   });
 
   let splashShown = false;

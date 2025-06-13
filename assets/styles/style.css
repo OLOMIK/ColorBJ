@@ -23,7 +23,7 @@
 }
 
 body {
-    background-color: #000;
+    background-color: #000 ;
     font-family: pr;
     color: #fff;
     padding: 0;
@@ -103,7 +103,11 @@ input, button:hover {
     background-color: #111111;
     padding: 10px;
     border-radius: 10px;
-
+    max-height: 800px !important;
+    overflow-y: scroll !important; 
+    overflow-x: hidden;
+    z-index: 1;
+    position: relative; /* Upewnia się, że tooltipy są poprawnie osadzone */
 }
 
 .nav {
@@ -170,7 +174,12 @@ nav ul li ul li {
     display: block;
     white-space: nowrap;
 }
-
+.userdata {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
 nav ul li ul li a {
     display: block;
     text-decoration: none;
@@ -377,9 +386,9 @@ close:hover {
     cursor: pointer;
     transition: 300ms;
 }
-
 .tooltip {
     position: relative;
+    z-index: 102;
 }
 
 .tooltip:before,
@@ -387,8 +396,8 @@ close:hover {
     display: block;
     opacity: 0;
     pointer-events: none;
-    position: absolute;
-    z-index: 10;
+    position: fixed; /* Zmiana z absolute na fixed */
+    z-index: 10000; /* Wysoki priorytet, aby tooltipy były nad innymi elementami */
 }
 
 .tooltip:before {
@@ -398,9 +407,12 @@ close:hover {
     content: attr(data-title);
     font-size: 14px;
     padding: 6px 10px;
-    top: 40px;
-    left: -35px;
     white-space: nowrap;
+    
+    /* Dynamiczne pozycjonowanie tooltipa */
+    top: var(--tooltip-top, 50%);
+    left: var(--tooltip-left, calc(100% + 10px)); /* Wyjście poza sidebar */
+    transform: translateY(-50%);
 }
 
 .dark-mode .tooltip:before {
@@ -595,4 +607,105 @@ close:hover {
     padding: 3px;
     border-radius: 5px;
     cursor: pointer;
+}
+.sidebar::-webkit-scrollbar {
+    width: 0.4em;
+    padding-left: 1vw;
+  }
+   
+  .sidebar::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+   
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    border-radius: 10px;
+  }
+  .light-mode {
+    --set-color: #ffffff;
+    --hover-color: #e0e0e0;
+    --font-color: #000000;
+    --background-color: #ffffff;
+    --sidebar-background: #f0f0f0;
+    --nav-background: #e0e0e0;
+    --tooltip-background: #f0f0f0;
+    --tooltip-color: #000000;
+}
+
+.light-mode body {
+    background-color: var(--background-color);
+    color: var(--font-color);
+}
+
+.light-mode .blok {
+    background-color: var(--background-color);
+}
+
+.light-mode .blok:hover {
+    background-color: var(--hover-color);
+}
+
+.light-mode .sidebar {
+    background-color: var(--sidebar-background);
+    color: var(--font-color);
+}
+
+.light-mode .nav {
+    background-color: var(--1-background);
+}
+
+.light-mode .tooltip:before {
+    background-color: var(--tooltip-background);
+    color: var(--tooltip-color);
+}
+
+.light-mode .containerContent {
+    background-color: var(--background-color);
+    color: var(--font-color);
+}
+
+.light-mode .containerHeader {
+    color: var(--font-color);
+}
+
+.light-mode input, .light-mode button {
+    background-color: var(--hover-color);
+    color: var(--font-color);
+}
+
+.light-mode input, .light-mode button:hover {
+    background-color: var(--background-color);
+}
+#loginWindow {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #111111;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+#loginWindow input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background-color: #222;
+    color: #fff;
+}
+#loginWindow button {
+    width: 100%;
+    padding: 10px;
+    background-color: #1e1e2e;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+#loginWindow button:hover {
+    background-color: #333;
 }

@@ -3,3 +3,6 @@ web
 ColorBJ-13.0-linux-x64
 ColorBJ-13.0-win32-x64
 .vscode
+dist
+.DS_Store
+build.js

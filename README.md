@@ -45,4 +45,5 @@ The online (web) version can be found [here](https://crystalx.pl/colorbj/).
 
 ## NOTE
 If you would like to make any changes, please send a pull request.
-We use API from stability.ai for background removal. If you want to use own API edit CanvasController.js.
+Background remover is currently disabled. We are working to make this feature better. For image generating we are using API from pollinations.ai
+

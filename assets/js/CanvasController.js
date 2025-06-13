@@ -1,4 +1,4 @@
-console.log("załadowano backend");
+console.log("załadowano skrypty odpowiedzialne za canvas");
 
 var canvas, ctx;
 var painting = false;
@@ -9,6 +9,7 @@ var kolor = "#5e5e5e";
 var posListening = false;
 var pastePosListening = false;
 var shapePosListening = false;
+var colorPosListening = false;
 var pastePosY;
 var pastePosX;
 var offscreenCanvas = document.createElement('canvas');
@@ -19,6 +20,55 @@ var disabled = false;
 var layers = [];
 var currentLayerIndex = 0;
 var layersPanelVisability = false;
+var history = [];
+var historyIndex = -1;
+var selectedColor;
+
+function saveHistory() {
+    if (historyIndex < history.length - 1) {
+        history = history.slice(0, historyIndex + 1);
+    }
+
+    const layersState = layers.map(layer => {
+        const layerCanvas = document.createElement('canvas');
+        layerCanvas.width = layer.width;
+        layerCanvas.height = layer.height;
+        layerCanvas.getContext('2d').drawImage(layer, 0, 0);
+        return layerCanvas;
+    });
+
+    history.push(layersState);
+    historyIndex++;
+}
+
+function undo() {
+    if (historyIndex > 0) {
+        historyIndex--;
+        restoreHistory();
+    }
+}
+
+function redo() {
+    if (historyIndex < history.length - 1) {
+        historyIndex++;
+        restoreHistory();
+    }
+}
+
+function restoreHistory() {
+    const layersState = history[historyIndex];
+    layers = layersState.map(layerState => {
+        const layerCanvas = document.createElement('canvas');
+        layerCanvas.width = layerState.width;
+        layerCanvas.height = layerState.height;
+        layerCanvas.getContext('2d').drawImage(layerState, 0, 0);
+        return layerCanvas;
+    });
+    currentLayerIndex = layers.length - 1;
+    updateLayersList();
+    renderLayers();
+}
+
 
 function togglePoprawianieLinii() {
     var walucja = document.getElementById("liniepoprawianedupnie").checked;
@@ -128,6 +178,7 @@ function ustawkolor(color) {
     kolor = color == '#000000' ? '#5e5e5e' : color;
     painting = false;
     updateCursor();
+    renderLayers();
 }
 
 function startPainting(event) {
@@ -237,19 +288,21 @@ function getMousePos(event) {
     return [x, y];
 }
 function fillSzachownica() {
-    
-    var kolorInput = document.getElementById("colorSel").value;
+    const layerCtx = layers[currentLayerIndex].getContext('2d');
+    const kolorInput = document.getElementById("colorSel").value;
     ustawkolor(kolorInput);
-    ctx.fillStyle = kolorInput;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    layerCtx.fillStyle = kolorInput;
+    layerCtx.fillRect(0, 0, canvas.width, canvas.height);
+    renderLayers();
     document.getElementById('windowContainer5').style.display = 'none';
-    ustawkolor('#5e5e5e');
     Notification("Wypełniono pole robocze nowym kolorem.", "success");
 }
 
 function clearSzachownica() {
-    ctx.fillStyle = currentBackgroundColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const layerCtx = layers[currentLayerIndex].getContext('2d');
+    layerCtx.fillStyle = currentBackgroundColor;
+    layerCtx.fillRect(0, 0, canvas.width, canvas.height);
+    renderLayers();
     document.getElementById('windowContainer4').style.display = 'none';
     Notification("Wyczyszczono pole robocze.", "success");
 }
@@ -262,48 +315,61 @@ function saveImage() {
     link.click();
     Notification("Zapisano obraz.", "success");
 }
-
+function dupa1(){
+    colorPosListening = true;
+    Notification("Rozpoczęto wybieranie koloru", NotificationType.SUCCESS);
+}
 function openImage(event) {
-    var input = event.target;
-    var reader = new FileReader();
+    const layerCtx = layers[currentLayerIndex].getContext('2d');
+    const input = event.target;
+    const reader = new FileReader();
     reader.onload = function() {
-        var dataURL = reader.result;
-        var image = new Image();
+        const dataURL = reader.result;
+        const image = new Image();
         image.onload = function() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            layerCtx.clearRect(0, 0, canvas.width, canvas.height);
             customSize2(image.width, image.height);
-            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+            layerCtx.drawImage(image, 0, 0, canvas.width, canvas.height);
+            renderLayers();
+            Notification("Otwarto nowy obraz.");
         };
         image.src = dataURL;
-        Notification("Otwarto nowy obraz.");
     };
     reader.readAsDataURL(input.files[0]);
 }
 
 function drawTextOnCanvas(text, x, y, font, color) {
-    ctx.font = font || 'Arial';
-    ctx.fillStyle = color || 'black';
-    ctx.fillText(text, x, y);
+    const layerCtx = layers[currentLayerIndex].getContext('2d');
+    layerCtx.font = font || 'Arial';
+    layerCtx.fillStyle = color || 'black';
+    layerCtx.fillText(text, x, y);
+    renderLayers();
 }
 
 document.getElementById('applyColors').addEventListener('click', function() {
-    var rValue = document.getElementById('rvalue').value;
-    var gValue = document.getElementById('gvalue').value;
-    var bValue = document.getElementById('bvalue').value;
-    var gammaValue = document.getElementById('gammaValue').value;
+    applyColors();
+});
 
-    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    var data = imageData.data;
+function applyColors() {
+    const layerCtx = layers[currentLayerIndex].getContext('2d');
+    const rValue = document.getElementById('rvalue').value;
+    const gValue = document.getElementById('gvalue').value;
+    const bValue = document.getElementById('bvalue').value;
+    const gammaValue = document.getElementById('gammaValue').value;
 
-    for (var i = 0; i < data.length; i += 4) {
+    const imageData = layerCtx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
         data[i] = 255 * Math.pow((data[i] / 255) + parseInt(rValue) / 255, 1 / gammaValue);
         data[i + 1] = 255 * Math.pow((data[i + 1] / 255) + parseInt(gValue) / 255, 1 / gammaValue);
         data[i + 2] = 255 * Math.pow((data[i + 2] / 255) + parseInt(bValue) / 255, 1 / gammaValue);
     }
 
-    ctx.putImageData(imageData, 0, 0);
+    layerCtx.putImageData(imageData, 0, 0);
+    renderLayers();
     Notification("Zmieniono kolory obrazu.")
-});
+}
 
 function dupkadupeczka() {
     drawTextOnCanvas(document.getElementById("tekscior").value, document.getElementById("posx").value, document.getElementById("posy").value, document.getElementById("rozmiar").value + "px " + document.getElementById("fontname").value, document.getElementById("kolor").value);
@@ -381,56 +447,12 @@ function startShapePosSelecting(){
     shapePosListening = true;
 }
 
-document.getElementById('niepaintCanvas').onclick = function(e) {
-    if (posListening) {
-        disabled = true;
-        updateCursor();
-        var rect = e.target.getBoundingClientRect();
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
-        document.getElementById("posx").value = x;
-        document.getElementById("posy").value = y;
-        posListening = false;
-        const container = document.getElementById('windowContainer7');
-        container.style.display = 'block';
-        disabled = false;
-        updateCursor();
-    }
-    if (pastePosListening) {
-        disabled = true;
-        updateCursor();
-        const container = document.getElementById('windowContainer20');
-        var rect = e.target.getBoundingClientRect();
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
-        document.getElementById("posxx").value = x;
-        document.getElementById("posyy").value = y;
-        pastePosListening = false;
-        container.style.display = 'block';
-        disabled = false;
-        updateCursor();
-    }
-    if (shapePosListening) {
-        disabled = true;
-        updateCursor();
-        const container = document.getElementById('windowContainer26');
-        var rect = e.target.getBoundingClientRect();
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
-        document.getElementById("xxx").value = x;
-        document.getElementById("yyy").value = y;
-        shapePosListening = false;
-        container.style.display = 'block';
-        disabled = false;
-        updateCursor();
-    }
-}
+
 
 
 async function removeBackground() {
-    const canvas = document.getElementById('niepaintCanvas');
-    const ctx = canvas.getContext('2d');
-    const imageBase64 = canvas.toDataURL('image/png').split(',')[1]; 
+    const layerCtx = layers[currentLayerIndex].getContext('2d');
+    const imageBase64 = canvas.toDataURL('image/png').split(',')[1];
 
     const apiKey = 'SG_83a74bc3458a84da';
     const url = 'https://api.segmind.com/v1/bg-removal';
@@ -459,12 +481,13 @@ async function removeBackground() {
 
         const resultImage = new Image();
         resultImage.onload = function() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(resultImage, 0, 0, canvas.width, canvas.height);
-            URL.revokeObjectURL(urlObject); 
+            layerCtx.clearRect(0, 0, canvas.width, canvas.height);
+            layerCtx.drawImage(resultImage, 0, 0, canvas.width, canvas.height);
+            URL.revokeObjectURL(urlObject);
+            renderLayers();
+            Notification("Usunięto tło z obrazu.");
         };
         resultImage.src = urlObject;
-        Notification("Usunięto tło z obrazu.");
     } catch (error) {
         const container = document.getElementById('windowContainer18');
         container.style.display = 'block';
@@ -567,6 +590,66 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+    canvas.onclick = function(e) {
+    const rect = e.target.getBoundingClientRect();
+    const x = Math.floor(e.clientX - rect.left);
+    const y = Math.floor(e.clientY - rect.top);
+
+    if (posListening) {
+        disabled = true;
+        updateCursor();
+        document.getElementById("posx").value = x;
+        document.getElementById("posy").value = y;
+        posListening = false;
+        document.getElementById('windowContainer7').style.display = 'block';
+        disabled = false;
+        updateCursor();
+    }
+
+    if (pastePosListening) {
+        disabled = true;
+        updateCursor();
+        document.getElementById("posxx").value = x;
+        document.getElementById("posyy").value = y;
+        pastePosListening = false;
+        document.getElementById('windowContainer20').style.display = 'block';
+        disabled = false;
+        updateCursor();
+    }
+
+    if (shapePosListening) {
+        disabled = true;
+        updateCursor();
+        document.getElementById("xxx").value = x;
+        document.getElementById("yyy").value = y;
+        shapePosListening = false;
+        document.getElementById('windowContainer26').style.display = 'block';
+        disabled = false;
+        updateCursor();
+    }
+
+    if (colorPosListening) {
+        disabled = true;
+        updateCursor();
+
+        const pixel = ctx.getImageData(x, y, 1, 1).data;
+        const r = pixel[0];
+        const g = pixel[1];
+        const b = pixel[2];
+
+        selectedColor = "#" + [r, g, b]
+            .map(v => v.toString(16).padStart(2, "0"))
+            .join("");
+
+        console.log('Wybrany kolor HEX:', selectedColor);
+
+        colorPosListening = false;
+        disabled = false;
+        kolor = selectedColor;
+        updateCursor();
+    }
+
+};
 });
 
 document.getElementById('wstawiaj').addEventListener('click', () => {
@@ -598,15 +681,14 @@ function printCanvas() {
     printWin.close();
 }
 function drawShape(index) {
-    var canvas = document.getElementById('niepaintCanvas');
-    var ctx = canvas.getContext("2d");
+    const layerCtx = layers[currentLayerIndex].getContext('2d');
 
     if (index < 0 || index >= ksztalty.length) {
         console.error('Invalid shape index');
         return;
     }
 
-    var icon = ksztalty[index].replace("width=\"32\" height=\"32\"", "width=\"128\" height=\"128\"");
+    const icon = ksztalty[index].replace("width=\"32\" height=\"32\"", "width=\"128\" height=\"128\"");
     const svgBase64 = `data:image/svg+xml;base64,${btoa(icon)}`;
 
     const img = new Image();
@@ -614,8 +696,9 @@ function drawShape(index) {
         const x = parseInt(document.getElementById("xxx").value, 10);
         const y = parseInt(document.getElementById("yyy").value, 10);
 
-        ctx.drawImage(img, x, y);
+        layerCtx.drawImage(img, x, y);
         hideWindow(26);
+        renderLayers();
         Notification("Wstawiono wybrany kształt na canvas.")
     };
     img.src = svgBase64;
@@ -640,19 +723,17 @@ function createButtons() {
 createButtons();
 
 function rysujGradient() {
-    var c = document.getElementById("niepaintCanvas");
-    var ctx = c.getContext("2d");
-    var kolor1 = document.getElementById("kolor1").value;
-    var kolor2 = document.getElementById("kolor2").value;
+    const layerCtx = layers[currentLayerIndex].getContext('2d');
+    const kolor1 = document.getElementById("kolor1").value;
+    const kolor2 = document.getElementById("kolor2").value;
 
-    
-    var grd = ctx.createLinearGradient(0, 0, c.width, 0); 
+    const grd = layerCtx.createLinearGradient(0, 0, canvas.width, 0);
     grd.addColorStop(0, kolor1);
     grd.addColorStop(1, kolor2);
 
-    
-    ctx.fillStyle = grd;
-    ctx.fillRect(0, 0, c.width, c.height);
+    layerCtx.fillStyle = grd;
+    layerCtx.fillRect(0, 0, canvas.width, canvas.height);
+    renderLayers();
 }
 
 function addLayer() {
@@ -675,7 +756,7 @@ function removeLayer() {
         updateLayersList();
         renderLayers();
     } else {
-        alert("Nie można usunąć ostatniej warstwy.");
+        Notification("Nie można usunąć ostatniej warstwy.", "error");
     }
 }
 
@@ -713,6 +794,40 @@ function toggleLayersPanel() {
     }
     layersPanelVisability = !layersPanelVisability;
     
+}
+function generowanko(){
+    var prompt = document.getElementById("promptInput").value;
+    generator(prompt);
+    Notification("Pomyślnie rozpoczęto generowanie obrazu.");   
+}
+async function generator(prompt) {
+    const layerCtx = layers[currentLayerIndex].getContext('2d');
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
+
+    try {
+        const response = await fetch(imageUrl);
+        
+        if (!response.ok) {
+            throw new Error('Błąd pobierania obrazu: ' + response.statusText);
+        }
+
+        const blob = await response.blob();
+        const urlObject = URL.createObjectURL(blob);
+
+        const resultImage = new Image();
+        resultImage.onload = function() {
+            layerCtx.clearRect(0, 0, canvas.width, canvas.height);
+            layerCtx.drawImage(resultImage, 0, 0, canvas.width, canvas.height);
+            URL.revokeObjectURL(urlObject);
+            renderLayers();
+            Notification("Wygenerowano obraz na podstawie podanego tekstu.", "success");
+        };
+        resultImage.src = urlObject;
+        Notification("Wygenerowano obraz na podstawie podanego tekstu.", "success");
+    } catch (error) {
+        console.error('Wystąpił błąd:', error);
+        Notification("Wystąpił błąd podczas generowania obrazu.", "error"); 
+    }
 }
 
 window.onload = function() {
