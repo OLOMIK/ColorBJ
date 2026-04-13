@@ -161,8 +161,8 @@ function setupCanvas() {
         return;
     }
     ctx = canvas.getContext('2d');
-    addLayer(); 
-    setCanvasSize();
+    setCanvasSize(); // najpierw ustaw rozmiar, potem addLayer — żeby warstwa miała poprawne wymiary
+    addLayer();
     window.addEventListener('resize', setCanvasSize);
     canvas.addEventListener('mousedown', startPainting);
     canvas.addEventListener('mousemove', paint);
@@ -518,139 +518,80 @@ async function sendOpinion(){
         container.innerHTML = "Nie udało się wysłać opinii, bardzo możliwe, że jesteś offline, lub wsparcie dla twojej wersji ColorBJ zostało zakończone.";
     }
 }
-document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('niepaintCanvas');
-    const ctx = canvas.getContext('2d');
+function blobToImage(blob) {
+    return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+        img.onerror = (err) => { URL.revokeObjectURL(url); reject(err); };
+        img.src = url;
+    });
+}
 
+function copyCanvasToClipboard() {
+    canvas.toBlob(blob => {
+        const item = new ClipboardItem({ 'image/png': blob });
+        navigator.clipboard.write([item]).then(() => {
+            Notification("Skopiowano zawartość canvasa do schowka.");
+        }).catch(err => {
+            sendError("Nie udało się skopiować canvasa do schowka. Błąd: " + err);
+            Notification("Wystąpił błąd, sprawdź konsolę javascript.", "error");
+        });
+    });
+}
+
+function setupCanvasListeners() {
     document.addEventListener('paste', async (event) => {
         const items = event.clipboardData.items;
         for (const item of items) {
             if (item.type.startsWith('image/')) {
-                const blob = item.getAsFile();
-                pastedImage = await blobToImage(blob);
-                showWindow(20);
-            }
-        }
-    });
-    
-    document.addEventListener('copy', async (event) => {
-        const items = event.clipboardData.items;
-        for (const item of items) {
-            if (item.type.startsWith('image/')) {
-                const blob = item.getAsFile();
-                pastedImage = await blobToImage(blob);
+                pastedImage = await blobToImage(item.getAsFile());
                 showWindow(20);
             }
         }
     });
 
-    function blobToImage(blob) {
-        return new Promise((resolve, reject) => {
-            const url = URL.createObjectURL(blob);
-            const img = new Image();
-            img.onload = () => {
-                URL.revokeObjectURL(url);
-                resolve(img);
-            };
-            img.onerror = (err) => {
-                URL.revokeObjectURL(url);
-                reject(err);
-            };
-            img.src = url;
-        });
-    }
     document.addEventListener('keydown', function(event) {
-        if (event.ctrlKey && event.key === 'c') {
-            copyCanvasToClipboard();
-        }
-        if (event.ctrlKey && event.key === 'p') {
-            event.preventDefault();
-            printCanvas();
-        }
+        if (event.ctrlKey && event.key === 'c') copyCanvasToClipboard();
+        if (event.ctrlKey && event.key === 'p') { event.preventDefault(); printCanvas(); }
     });
-    
-    function copyCanvasToClipboard() {
-        canvas.toBlob(blob => {
-            const item = new ClipboardItem({ 'image/png': blob });
-            navigator.clipboard.write([item]).then(() => {
-                Notification("Skopiowano zawartość canvasa do schowka.");
-            }).catch(err => {
-                sendError("Nie udało się skopiować canvasa do schowka<br>Błąd: "+err, );
-                Notification("Wystąpił błąd, sprawdź konsolę javascript.", "error");
-            });
-        });
-    }
-    async function ustawSchowek(){
-        const items = navigator.clipboard.read();
-        for (const item of items) {
-            if (item.type.startsWith('image/')) {
-                const blob = item.getAsFile();
-                const img = await blobToImage(blob);
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            }
-        }
-    }
+
     canvas.onclick = function(e) {
-    const rect = e.target.getBoundingClientRect();
-    const x = Math.floor(e.clientX - rect.left);
-    const y = Math.floor(e.clientY - rect.top);
+        const rect = e.target.getBoundingClientRect();
+        const x = Math.floor(e.clientX - rect.left);
+        const y = Math.floor(e.clientY - rect.top);
 
-    if (posListening) {
-        disabled = true;
-        updateCursor();
-        document.getElementById("posx").value = x;
-        document.getElementById("posy").value = y;
-        posListening = false;
-        document.getElementById('windowContainer7').style.display = 'block';
-        disabled = false;
-        updateCursor();
-    }
+        if (posListening) {
+            document.getElementById("posx").value = x;
+            document.getElementById("posy").value = y;
+            posListening = false;
+            showWindow(7);
+        }
 
-    if (pastePosListening) {
-        disabled = true;
-        updateCursor();
-        document.getElementById("posxx").value = x;
-        document.getElementById("posyy").value = y;
-        pastePosListening = false;
-        document.getElementById('windowContainer20').style.display = 'block';
-        disabled = false;
-        updateCursor();
-    }
+        if (pastePosListening) {
+            document.getElementById("posxx").value = x;
+            document.getElementById("posyy").value = y;
+            pastePosListening = false;
+            showWindow(20);
+        }
 
-    if (shapePosListening) {
-        disabled = true;
-        updateCursor();
-        document.getElementById("xxx").value = x;
-        document.getElementById("yyy").value = y;
-        shapePosListening = false;
-        document.getElementById('windowContainer26').style.display = 'block';
-        disabled = false;
-        updateCursor();
-    }
+        if (shapePosListening) {
+            document.getElementById("xxx").value = x;
+            document.getElementById("yyy").value = y;
+            shapePosListening = false;
+            showWindow(26);
+        }
 
-    if (colorPosListening) {
-        disabled = true;
-        updateCursor();
-
-        const pixel = ctx.getImageData(x, y, 1, 1).data;
-        const r = pixel[0];
-        const g = pixel[1];
-        const b = pixel[2];
-
-        selectedColor = "#" + [r, g, b]
-            .map(v => v.toString(16).padStart(2, "0"))
-            .join("");
-
-        console.log('Wybrany kolor HEX:', selectedColor);
-
-        colorPosListening = false;
-        disabled = false;
-        kolor = selectedColor;
-        updateCursor();
-    }
-
-};
-});
+        if (colorPosListening) {
+            const pixel = ctx.getImageData(x, y, 1, 1).data;
+            selectedColor = "#" + [pixel[0], pixel[1], pixel[2]]
+                .map(v => v.toString(16).padStart(2, "0")).join("");
+            colorPosListening = false;
+            kolor = selectedColor;
+            updateCursor();
+        }
+    };
+}
 
 document.getElementById('wstawiaj').addEventListener('click', () => {
     const x = parseInt(document.getElementById('posxx').value);
@@ -720,8 +661,6 @@ function createButtons() {
         container.appendChild(button);
     });
 }
-createButtons();
-
 function rysujGradient() {
     const layerCtx = layers[currentLayerIndex].getContext('2d');
     const kolor1 = document.getElementById("kolor1").value;
@@ -830,7 +769,8 @@ async function generator(prompt) {
     }
 }
 
-window.onload = function() {
-    setupCanvas();
-    setupDragAndDrop();
-};
+
+setupCanvas();        
+setupDragAndDrop();
+setupCanvasListeners();
+createButtons();      

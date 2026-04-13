@@ -61,4 +61,4 @@ async function login() {
         document.getElementById('loginError').style.display = 'block';
     }
 }
-document.addEventListener('DOMContentLoaded', fetchAccountInfo);
+document.addEventListener('components-ready', fetchAccountInfo);

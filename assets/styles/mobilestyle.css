@@ -1,3 +1,4 @@
+/* ===== Ekran powitalny ===== */
 .panelsrodkowy {
     padding: 10% !important;
     background-color: #242424 !important;
@@ -11,45 +12,111 @@
     display: grid !important;
     place-content: center !important;
     border-radius: 15px !important;
-    -webkit-border-radius: 15px !important;
-    -moz-border-radius: 15px !important;
-    -ms-border-radius: 15px !important;
-    -o-border-radius: 15px !important;
 }
-.sidebar{
-    max-height: 90vh !important;
-    overflow-y: auto !important; 
-    overflow-x: hidden;
-}
+
 .panelsrodkowy button {
     margin: 5px !important;
-    padding: 10px 20px !important; /* Ensure buttons have adequate padding */
-    font-size: 1rem !important; /* Make button text size responsive */
-    width: 100% !important; /* Ensure buttons take full width for better touch interaction */
-    box-sizing: border-box !important; /* Make sure padding and border are included in the width */
+    padding: 10px 20px !important;
+    font-size: 1rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
-/* Ensure text is centered and adjusts to screen size */
 .panelsrodkowy h1, .panelsrodkowy p {
     text-align: center !important;
-    margin: 0 0 10px 0 !important; /* Ensure spacing between elements */
-    font-size: 1.5rem !important; /* Adjust font size for better readability */
+    margin: 0 0 10px 0 !important;
+    font-size: 1.5rem !important;
 }
 
-/* Adjustments for small screens */
+/* ===== Edytor ===== */
+
+/* Główny layout pionowy na mobile */
+#ass {
+    flex-direction: column !important;
+}
+
+/* Sidebar poziomy (paskek narzędzi na górze) */
+.sidebar {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    max-height: none !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    width: 100% !important;
+    margin-right: 0 !important;
+    margin-bottom: 8px !important;
+    padding: 6px !important;
+    gap: 4px !important;
+}
+
+/* Ikony w sidebarze mniejsze na mobile */
+.sidebar .icon {
+    width: 40px !important;
+    height: 40px !important;
+}
+
+/* Canvas zajmuje całą szerokość */
+#container {
+    width: 100% !important;
+    overflow-x: auto !important;
+}
+
+#niepaintCanvas {
+    max-width: 100% !important;
+    touch-action: none;
+}
+
+/* Nav — chowamy dropdown, zostawiamy tylko przycisk mobile GUI */
+#navbardupa {
+    display: none !important;
+}
+
+#guiMobilneButton {
+    display: flex !important;
+}
+
+/* Panel warstw pełna szerokość */
+.layers-panel {
+    width: 100% !important;
+    margin-right: 0 !important;
+    margin-top: 8px !important;
+    position: static !important;
+    max-height: 200px !important;
+}
+
+/* Okna modalne pełna szerokość */
+.containerContent {
+    width: 90vw !important;
+    max-width: 100% !important;
+    margin-top: 10vh !important;
+    box-sizing: border-box !important;
+}
+
+/* ===== Małe ekrany ===== */
 @media (max-width: 600px) {
-    .panelsrodkowy  {
-        width: 90vw !important; 
-        max-width: 100% !important; 
+    .panelsrodkowy {
+        width: 90vw !important;
+        max-width: 100% !important;
         padding: 5% !important;
     }
-    
+
     .panelsrodkowy h1, .panelsrodkowy p {
         font-size: 1.2rem !important;
     }
-    
+
     .panelsrodkowy button {
         font-size: 0.9rem !important;
         padding: 8px 16px !important;
+    }
+
+    .sidebar .icon {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .sidebar .icon svg {
+        width: 20px !important;
+        height: 20px !important;
     }
 }

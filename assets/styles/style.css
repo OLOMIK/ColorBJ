@@ -69,17 +69,6 @@ html {
     margin-top: 20px;
 }
 
-.zapiszgowno {
-    background-color: #1e1e2e;
-    padding: 10px;
-    border: none;
-    width: 200px;
-    border-radius: 10px;
-    margin-top: 10px;
-    color: #fff;
-    font-family: sex;
-}
-
 input, button {
     background-color: #1e1e2e;
     padding: 10px;
@@ -209,75 +198,12 @@ nav ul li ul li a:hover {
     margin-top: 25px;
 }
 
-#windowContainer {
-    display: none;
-}
-
-#windowContainer2 {
-    display: none;
-}
-
-#windowContainer3 {
-    display: none;
-}
-
-#windowContainer4 {
-    display: none;
-}
-
-#windowContainer5 {
-    display: none;
-}
-
-#windowContainer6 {
-    display: none;
-}
-
-#windowContainer7 {
-    display: none;
-}
-
-#windowContainer8 {
-    display: none;
-}
-#windowContainer17 {
-    display: none;
-}
-#windowContainer9 {
-    display: none;
-}
-.dupnydiv{
+.dupnydiv {
     max-height: 40vh !important;
-    overflow-y: scroll !important; 
+    overflow-y: scroll !important;
 }
 
-#windowContainer10 {
-    display: none;
-}
-
-#windowContainer11 {
-    display: none;
-}
-#windowContainer19 {
-    display: none;
-}
 #rbContainer {
-    display: none;
-}
-
-#rbContainer2 {
-    display: none;
-}
-
-#rbContainer3 {
-    display: none;
-}
-
-#rbContainer4 {
-    display: none;
-}
-
-#rbContainer5 {
     display: none;
 }
 

@@ -1,4 +1,5 @@
 // tu nic nie dziala, mamy nadzieje ze tworcom bedzie sie chcialo zrobic to w v15.0
+// tak tak, pamietam, w 16.0 to ogarne chyba ze puszcze ta wersje na produkcje jutro (2026-04-14) to moze to ogarne, ale jak na razie mam w to wyjebane
 const translations = {
     en: {
         welcome: "Welcome to ColorBJ",

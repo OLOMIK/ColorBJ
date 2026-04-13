@@ -6,3 +6,4 @@ ColorBJ-13.0-win32-x64
 dist
 .DS_Store
 build.js
+.claude
